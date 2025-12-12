@@ -38,7 +38,7 @@ export default function SelectedEventHall() {
   const getSelectedEventHall = useCallback(async () => {
     if (!eventHallId) return;
     try {
-      const res = await fetch(`http://localhost:3000/api/selected-event-hall`, {
+      const res = await fetch(`api/selected-event-hall`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ eventHallId }),
