@@ -7,7 +7,6 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 
-import { Header } from "@/components/us/Header";
 import MonthlyCalendar from "@/components/event-halls/DayCalendar";
 import { CarouselMy } from "@/components/us/CarouselMy";
 
@@ -38,7 +37,7 @@ export default function SelectedEventHall() {
   const getSelectedEventHall = useCallback(async () => {
     if (!eventHallId) return;
     try {
-      const res = await fetch(`api/selected-event-hall`, {
+      const res = await fetch(`/api/selected-event-hall`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ eventHallId }),
