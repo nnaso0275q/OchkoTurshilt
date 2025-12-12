@@ -14,6 +14,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"; // named exports
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface HallType {
   id: number;
@@ -27,6 +28,7 @@ interface HallType {
 
 export const CarouselMy = ({ halls }: { halls?: HallType[] }) => {
   const [api, setApi] = React.useState<CarouselApi>();
+
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
   const [originalHalls, setOriginalHalls] = useState<any[]>(halls || []);
@@ -45,6 +47,7 @@ export const CarouselMy = ({ halls }: { halls?: HallType[] }) => {
         if (data) {
           setOriginalHalls(data.data);
           setFilteredHalls(data.data);
+          console.log(data.data);
         }
       } catch (e) {
         console.error(e);
@@ -102,6 +105,7 @@ export const CarouselMy = ({ halls }: { halls?: HallType[] }) => {
 };
 
 const CarouselCard = ({ el }: { el: HallType }) => {
+  const router = useRouter();
   return (
     <CarouselItem className="relative w-full h-[60vh] sm:h-screen p-0">
       <Card className="w-full h-full p-0 border-0 ml-[16] shadow-none rounded-none relative">
@@ -146,7 +150,10 @@ const CarouselCard = ({ el }: { el: HallType }) => {
           <p className="mt-2 lg:mt-4 text-base lg:text-lg max-w-[320px] lg:max-w-[500px] [text-shadow:0_1px_3px_rgb(0_0_0/0.5)] truncate">
             {el.description}
           </p>
-          <button className="mt-4 w-fit bg-white/90 text-black font-bold py-2 px-6 rounded-md hover:bg-white transition-colors">
+          <button
+            onClick={() => router.push(`/event-halls/${el.id}`)}
+            className="mt-4 w-fit bg-white/90 text-black font-bold py-2 px-6 rounded-md hover:bg-white transition-colors"
+          >
             More Info
           </button>
         </CardContent>
@@ -156,7 +163,7 @@ const CarouselCard = ({ el }: { el: HallType }) => {
             Event Hall:
           </p>
           <h1 className="font-bold text-2xl mb-1 [text-shadow:0_2px_4px_rgb(0_0_0/0.5)]">
-            {el.title}
+            {el.name}
           </h1>
           <div className="flex items-center text-[14px] mb-2 [text-shadow:0_1px_3px_rgb(0_0_0/0.5)]">
             <svg
@@ -177,7 +184,10 @@ const CarouselCard = ({ el }: { el: HallType }) => {
           <p className="text-[14px] line-clamp-3 [text-shadow:0_1px_3px_rgb(0_0_0/0.5)]">
             {el.description}
           </p>
-          <button className="mt-3 w-fit bg-white/90 text-black font-bold py-1.5 px-4 rounded-md text-sm hover:bg-white transition-colors">
+          <button
+            onClick={() => router.push(`/event-halls/${el.id}`)}
+            className="mt-3 w-fit bg-white/90 text-black font-bold py-1.5 px-4 rounded-md text-sm hover:bg-white transition-colors"
+          >
             More Info
           </button>
         </CardContent>

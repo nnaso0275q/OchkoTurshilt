@@ -192,7 +192,7 @@ export default function EventHallsPage({
               type="number"
               value={capacity}
               onChange={(e) => setCapacity(e.target.value)}
-              placeholder="Min. guests"
+              placeholder="Хүний тоо хамгийн ихдээ"
               className="bg-transparent outline-none w-full text-gray-200"
             />
           </div>

@@ -3,11 +3,12 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Users, DollarSign, Star } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const Hero = () => {
   const [originalHalls, setOriginalHalls] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const router = useRouter();
   useEffect(() => {
     const getData = async () => {
       try {
@@ -54,6 +55,7 @@ export const Hero = () => {
               key={hall.id}
               className="bg-neutral-900 rounded-lg overflow-hidden transform hover:shadow-xl hover:scale-[1.02] transition-transform duration-200"
               style={{ animationDelay: `${600 + index * 100}ms` }}
+              onClick={() => router.push(`/event-halls/${hall.id}`)}
             >
               <div className="relative h-48 w-full">
                 <Image

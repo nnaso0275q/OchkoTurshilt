@@ -37,6 +37,7 @@ async function fetcher(url: string) {
   if (!res.ok) throw new Error("Failed to fetch");
 
   const data = await res.json();
+
   return data.bookings;
 }
 
@@ -45,13 +46,29 @@ async function fetcher(url: string) {
 export default function Dashboard() {
   const router = useRouter();
 
-  const { data: bookings, isLoading } = useSWR(
-    "/api/dashboard-backend",
-    fetcher
-  );
+  const {
+    data: bookings,
+    isLoading,
+    error,
+  } = useSWR("/api/dashboard-backend", fetcher);
 
-  if (isLoading) return <p className="text-white text-4xl">Loading...</p>;
+  console.log("Dashboard data:", { bookings, isLoading, error });
 
+  if (isLoading)
+    return <p className="text-white text-4xl">Ачааллаж байна...</p>;
+
+  if (error) {
+    console.error("Dashboard error:", error);
+    return (
+      <div className="p-10">
+        <h1 className="text-3xl font-bold text-white mb-4">Алдаа гарлаа</h1>
+        <p className="text-white/70 text-xl">
+          {error.message || "Мэдээлэл татахад алдаа гарлаа"}
+        </p>
+      </div>
+    );
+  }
+  console.log({ bookings });
   if (!bookings || bookings.length === 0)
     return (
       <div className="p-10">
@@ -73,11 +90,13 @@ export default function Dashboard() {
         hall: curr.event_halls,
         hallBooking: null,
         performers: [],
+        hosts: [],
       };
     }
 
-    if (!curr.performersid) acc[key].hallBooking = curr;
-    else acc[key].performers.push(curr);
+    if (!curr.performersid && !curr.hostid) acc[key].hallBooking = curr;
+    else if (curr.performersid) acc[key].performers.push(curr);
+    else if (curr.hostid) acc[key].hosts.push(curr);
 
     return acc;
   }, {});
@@ -93,22 +112,22 @@ export default function Dashboard() {
         <div className="grid md:grid-cols-3 gap-6 mb-10">
           {[
             {
-              title: "Your Active Events",
+              title: "Таны идэвхтэй арга хэмжээ",
               value: Object.keys(grouped).length,
-              sub: "Managed halls",
+              sub: "Захиалсан танхим",
               color: "from-blue-500/20 to-blue-600/20",
             },
             {
-              title: "Pending Requests",
+              title: "Хүлээгдэж буй хүсэлт",
               value: bookings.filter((b: any) => b.status === "pending").length,
-              sub: "Performers & Hosts",
+              sub: "Дуучид болон Хөтлөгчид",
               color: "from-purple-500/20 to-purple-600/20",
             },
             {
-              title: "Approved Performers",
+              title: "Баталгаажсан захиалга",
               value: bookings.filter((b: any) => b.status === "approved")
                 .length,
-              sub: "Ready to perform",
+              sub: "Тоглолтод бэлэн",
               color: "from-green-500/20 to-green-600/20",
             },
           ].map((kpi, i) => (
@@ -125,14 +144,14 @@ export default function Dashboard() {
 
         {/* BOOKINGS GRID */}
         <h2 className="text-2xl text-white font-bold mb-6">
-          Your Booked Event Halls
+          Таны захиалсан арга хэмжээний танхим
         </h2>
 
         {/* Search */}
         <div className="relative hidden md:block mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
           <Input
-            placeholder="Search events, performers..."
+            placeholder="Арга хэмжээ, дуучид хайх..."
             className="w-72 rounded-2xl border-white/10 bg-white/5 pl-10 text-white placeholder:text-white/40 focus:shadow-[0_0_20px_rgba(76,139,255,0.3)]"
           />
         </div>
@@ -140,15 +159,22 @@ export default function Dashboard() {
           {Object.entries(grouped).map(([key, group]: any) => {
             const hallBooking = group.hallBooking;
             const performers = group.performers;
+            const hosts = group.hosts;
             const hallId = group.hall?.id;
 
             const date =
               hallBooking?.date ||
-              (performers.length > 0 ? performers[0].date : null);
+              (performers.length > 0 ? performers[0].date : null) ||
+              (hosts.length > 0 ? hosts[0].date : null);
 
             const startTime =
               hallBooking?.starttime ||
-              (performers.length > 0 ? performers[0].starttime : null);
+              (performers.length > 0 ? performers[0].starttime : null) ||
+              (hosts.length > 0 ? hosts[0].starttime : null);
+
+            // Get the booking ID for navigation (prefer hallBooking, fallback to first performer/host booking)
+            const bookingId =
+              hallBooking?.id || performers[0]?.id || hosts[0]?.id;
 
             return (
               <div
@@ -179,14 +205,8 @@ export default function Dashboard() {
                           </p>
                         </div>
 
-                        <span
-                          className={`rounded-xl px-4 py-1.5 text-xs font-semibold ${
-                            hallBooking
-                              ? "bg-emerald-500/20 text-emerald-400"
-                              : "bg-amber-500/20 text-amber-400"
-                          }`}
-                        >
-                          {hallBooking ? "Confirmed" : "Pending"}
+                        <span className="rounded-xl px-4 py-1.5 text-xs font-semibold bg-emerald-500/20 text-emerald-400">
+                          Баталгаажсан
                         </span>
                       </div>
 
@@ -274,18 +294,80 @@ export default function Dashboard() {
                             variant="outline"
                             className="w-full rounded-xl border-white/10 bg-white/5 text-xs text-white hover:border-blue-500/40 hover:bg-blue-500/10"
                           >
-                            View Profile
+                            Профайл үзэх
                           </Button>
                         </div>
                       ))}
                     </div>
                   </div>
+
+                  {/* Hosts Section */}
+                  <div className="mt-8">
+                    <h4 className="mb-4 text-lg font-semibold text-white">
+                      Урьсан хөтлөгчид
+                    </h4>
+
+                    {/* If no hosts */}
+                    {hosts.length === 0 && (
+                      <p className="text-white/50 text-sm">
+                        Одоогоор урьсан хөтлөгч байхгүй байна.
+                      </p>
+                    )}
+
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                      {hosts.map((h: any) => {
+                        return (
+                          <div
+                            key={h.id}
+                            className="rounded-2xl border border-white/10 bg-white/5 p-4 transition-all hover:border-purple-400/40 hover:bg-white/10 "
+                          >
+                            <div className="mb-3 flex items-center gap-3">
+                              <Avatar className="h-12 w-12 border border-white/20">
+                                <AvatarImage src={h.hosts?.image} />
+                                <AvatarFallback>HT</AvatarFallback>
+                              </Avatar>
+
+                              <div className="flex-1 overflow-hidden">
+                                <p className="truncate text-sm font-semibold text-white">
+                                  {h.hosts?.name}
+                                </p>
+                                <p className="text-xs text-white/50">
+                                  {h.hosts?.title}
+                                </p>
+                              </div>
+                            </div>
+
+                            <span
+                              className={`mb-3 inline-block rounded-lg px-3 py-1 text-xs font-medium ${
+                                h.status === "approved"
+                                  ? "bg-emerald-500/20 text-emerald-400"
+                                  : h.status === "pending"
+                                  ? "bg-amber-500/20 text-amber-400"
+                                  : "bg-red-500/20 text-red-400"
+                              }`}
+                            >
+                              {h.status}
+                            </span>
+
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="w-full rounded-xl border-white/10 bg-white/5 text-xs text-white hover:border-purple-500/40 hover:bg-purple-500/10"
+                            >
+                              Профайл үзэх
+                            </Button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   <div className="flex gap-3 pt-6">
-                    {hallId && (
+                    {bookingId && (
                       <Button
                         className="hidden sm:flex items-center gap-2 rounded-2xl px-6 py-2 text-sm font-semibold text-white hover:scale-105"
                         onClick={() =>
-                          router.push(`/performers?hall=${hallId}`)
+                          router.push(`/performers?booking=${bookingId}`)
                         }
                       >
                         <MicVocal className="h-4 w-4" />
@@ -293,10 +375,12 @@ export default function Dashboard() {
                       </Button>
                     )}
 
-                    {hallId && (
+                    {bookingId && (
                       <Button
                         className="hidden sm:flex items-center gap-2 rounded-2xl px-6 py-2 text-sm font-semibold text-white hover:scale-105"
-                        onClick={() => router.push(`/host?hall=${hallId}`)}
+                        onClick={() =>
+                          router.push(`/host?booking=${bookingId}`)
+                        }
                       >
                         <Mic className="h-4 w-4" />
                         Хөтлөгч захиалах

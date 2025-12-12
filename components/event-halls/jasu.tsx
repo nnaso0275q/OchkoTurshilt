@@ -58,7 +58,7 @@ const EventHallsListing = () => {
                   className="w-full h-[230px] rounded-2xl"
                   src={hall.images}
                 />
-
+                ç
                 <div className="px-4 py-4 space-y-1">
                   <a className="text-white text-2xl font-semibold">
                     {hall.name}

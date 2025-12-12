@@ -1,7 +1,10 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
+import { LocateFixed, MousePointerClick, Navigation } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface EventHall {
   id: number;
@@ -60,16 +63,43 @@ const extractCoordinates = (
   if (!locationLink) return null;
 
   try {
+    // Priority 1: Try !3d (latitude) and !4d (longitude) pattern - most accurate for place markers
+    const preciseLatPattern = /!3d(-?\d+\.?\d*)/;
+    const preciseLngPattern = /!4d(-?\d+\.?\d*)/;
+    const preciseLatMatch = locationLink.match(preciseLatPattern);
+    const preciseLngMatch = locationLink.match(preciseLngPattern);
+
+    if (preciseLatMatch && preciseLngMatch) {
+      const coords = {
+        lat: parseFloat(preciseLatMatch[1]),
+        lng: parseFloat(preciseLngMatch[1]),
+      };
+      console.log("Extracted coordinates using !3d/!4d pattern:", coords);
+      return coords;
+    }
+
+    // Priority 2: Try q= pattern
     const coordPattern = /q=(-?\d+\.?\d*),(-?\d+\.?\d*)/;
     const coordMatch = locationLink.match(coordPattern);
     if (coordMatch) {
-      return { lat: parseFloat(coordMatch[1]), lng: parseFloat(coordMatch[2]) };
+      const coords = {
+        lat: parseFloat(coordMatch[1]),
+        lng: parseFloat(coordMatch[2]),
+      };
+      console.log("Extracted coordinates using q= pattern:", coords);
+      return coords;
     }
 
+    // Priority 3: Try @ pattern (fallback, less accurate - viewport center)
     const placePattern = /@(-?\d+\.?\d*),(-?\d+\.?\d*)/;
     const placeMatch = locationLink.match(placePattern);
     if (placeMatch) {
-      return { lat: parseFloat(placeMatch[1]), lng: parseFloat(placeMatch[2]) };
+      const coords = {
+        lat: parseFloat(placeMatch[1]),
+        lng: parseFloat(placeMatch[2]),
+      };
+      console.log("Extracted coordinates using @ pattern:", coords);
+      return coords;
     }
 
     console.warn("Unsupported location link format:", locationLink);
@@ -84,8 +114,120 @@ interface MapContentProps {
   eventHalls: EventHall[];
 }
 
+// Reset View Button Component
+function SnapToStartButton({
+  defaultCenter,
+  defaultZoom,
+}: {
+  defaultCenter: [number, number];
+  defaultZoom: number;
+}) {
+  const map = useMap();
+
+  const handleReset = () => {
+    map.setView(defaultCenter, defaultZoom, {
+      animate: true,
+      duration: 0.5,
+    });
+  };
+
+  return (
+    <Button
+      onClick={handleReset}
+      className="absolute top-34 right-20 z-1000 bg-white hover:bg-gray-100 text-gray-800 shadow-lg w-[140px]"
+      size="sm"
+    >
+      <LocateFixed className="h-4 w-4 mr-2" />
+      Reset View
+    </Button>
+  );
+}
+
+// My Location Button Component
+function MyLocationButton() {
+  const map = useMap();
+  const [isLocating, setIsLocating] = useState(false);
+
+  const handleMyLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        map.setView([latitude, longitude], 15, {
+          animate: true,
+          duration: 0.5,
+        });
+
+        // Add a temporary marker at user's location
+        const userIcon = L.icon({
+          iconUrl:
+            "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+          shadowUrl:
+            "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        });
+
+        L.marker([latitude, longitude], { icon: userIcon })
+          .addTo(map)
+          .bindPopup("You are here")
+          .openPopup();
+
+        setIsLocating(false);
+        toast.success("Located your position!");
+      },
+      (error) => {
+        setIsLocating(false);
+        let errorMessage = "Unable to retrieve your location";
+
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage =
+              "Location permission denied. Please enable location access.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = "Location information is unavailable";
+            break;
+          case error.TIMEOUT:
+            errorMessage = "Location request timed out";
+            break;
+        }
+
+        toast.error(errorMessage);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  };
+
+  return (
+    <Button
+      onClick={handleMyLocation}
+      disabled={isLocating}
+      className="absolute top-46 right-20 z-1000 bg-blue-600 hover:bg-blue-700 text-white shadow-lg disabled:opacity-50 w-[140px]"
+      size="sm"
+    >
+      <Navigation
+        className={`h-4 w-4 mr-2 ${isLocating ? "animate-pulse" : ""}`}
+      />
+      {isLocating ? "Locating..." : "My Location"}
+    </Button>
+  );
+}
+
 export default function MapContent({ eventHalls }: MapContentProps) {
   const customIcon = createCustomIcon();
+  const [isMapActive, setIsMapActive] = useState(false);
 
   const validLocations = eventHalls
     .map((hall) => {
@@ -101,19 +243,39 @@ export default function MapContent({ eventHalls }: MapContentProps) {
 
   if (!customIcon) {
     return (
-      <div className="h-96 w-full bg-gray-800 rounded-lg flex items-center justify-center">
+      <div className="h-[600px] w-full bg-gray-800 rounded-lg flex items-center justify-center">
         <div className="text-white">Initializing map...</div>
       </div>
     );
   }
 
   return (
-    <div className="relative h-96 w-full rounded-lg overflow-hidden shadow-lg">
+    <div className="relative h-[600px] w-full rounded-lg overflow-hidden shadow-lg snap-start mt-20 z-10">
+      {/* Click-to-activate overlay */}
+      {!isMapActive && (
+        <div
+          onClick={() => setIsMapActive(true)}
+          className="absolute inset-0 z-999 bg-black/20 backdrop-blur-[1px] flex items-center justify-center cursor-pointer group hover:bg-black/30 transition-colors"
+        >
+          <div className="bg-white px-6 py-3 rounded-lg shadow-xl flex items-center gap-2 group-hover:scale-105 transition-transform">
+            <MousePointerClick className="h-5 w-5 text-gray-700" />
+            <span className="text-gray-700 font-medium">
+              Click to interact with map
+            </span>
+          </div>
+        </div>
+      )}
       <MapContainer
         center={defaultCenter}
         zoom={12}
-        className="h-full w-full"
+        className="h-full w-full mt-20"
         style={{ background: "#1f2937" }}
+        scrollWheelZoom={true}
+        dragging={true}
+        touchZoom={true}
+        doubleClickZoom={true}
+        boxZoom={true}
+        keyboard={true}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -168,10 +330,12 @@ export default function MapContent({ eventHalls }: MapContentProps) {
         ))}
 
         <MapBounds locations={validLocations.map((h) => h.coords)} />
+        <SnapToStartButton defaultCenter={defaultCenter} defaultZoom={14} />
+        <MyLocationButton />
       </MapContainer>
 
       {validLocations.length === 0 && (
-        <div className="absolute inset-0 bg-gray-800/90 flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 bg-gray-800/90 flex items-center justify-center pointer-events-none z-50">
           <p className="text-gray-400">
             No event halls with locations to display
           </p>

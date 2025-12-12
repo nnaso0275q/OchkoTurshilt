@@ -15,12 +15,6 @@ export async function GET(request: Request) {
     }
 
     const token = authHeader.split(" ")[1];
-    if (token === "null" || token === "undefined") {
-      return NextResponse.json(
-        { error: "Token is null or undefined" },
-        { status: 401 }
-      );
-    }
 
     // 2. Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;

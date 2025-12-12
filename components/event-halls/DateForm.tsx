@@ -60,6 +60,7 @@ const DateForm = ({
     const bookingData = {
       hallId,
       bookings: selected,
+      status: "approved",
     };
 
     try {

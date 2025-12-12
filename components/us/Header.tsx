@@ -231,7 +231,7 @@ export const Header = () => {
                     <PopoverContent
                       align="end"
                       className="w-60 bg-neutral-900/95 backdrop-blur-xl border border-neutral-800 
-             text-white rounded-xl shadow-2xl p-2"
+             text-white rounded-xl shadow-2xl p-2 z-1001"
                     >
                       {/* User Section */}
                       {user?.name && (

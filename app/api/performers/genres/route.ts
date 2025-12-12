@@ -17,11 +17,11 @@ export async function GET() {
 
     // Extract unique genres
     const genresSet = new Set<string>();
-    performers.forEach((performer: { genre: string }) => {
+    performers.forEach((performer) => {
       if (performer.genre) {
         // Split by comma, slash, or other separators
         const genres = performer.genre.split(/[,\/]/).map((g) => g.trim());
-        genres.forEach((genre: string) => {
+        genres.forEach((genre) => {
           if (genre) genresSet.add(genre);
         });
       }

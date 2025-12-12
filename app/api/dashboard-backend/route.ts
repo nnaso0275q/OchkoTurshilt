@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
       include: {
         event_halls: true,
         performers: true,
-        // performer байгаа бол эндээс авна
+        hosts: true,
       },
       orderBy: { date: "asc" },
     });

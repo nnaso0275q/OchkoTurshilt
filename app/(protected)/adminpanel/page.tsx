@@ -144,62 +144,66 @@ export default function AdminDashboard() {
   };
   console.log("form", form);
   return (
-    <div>
+    <div className="bg-black min-h-screen">
       <Header />
-      <main className="min-h-screen  p-4 md:p-8">
+      <main className=" text-white p-4 md:p-10 mx-auto">
         <div className="mx-auto max-w-4xl">
           <div className="mb-8">
-            <h1 className="text-white text-3xl font-bold md:text-4xl">
-              Таньд ирсэн нэгдсэн хүсэлтүүд
+            <h1 className="text-4xl font-bold mb-8 bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Таньд ирсэн хүсэлтүүд :
             </h1>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {form.map((item) => (
               <Card
                 key={item.id}
-                className="bg-neutral-900 text-white rounded-xl overflow-hidden"
+                className="bg-neutral-900/60 border border-neutral-800 shadow-xl transition-transform hover:scale-[1.02] duration-200 text-white rounded-xl overflow-hidden flex flex-col"
               >
-                <CardContent>
-                  <h2 className="text-lg font-semibold mb-2">
-                    {item.hallname}
-                  </h2>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Нэр: {item.name}
-                  </p>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    И-мэйл: {item.email}
-                  </p>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Утас: {item.number}
-                  </p>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Байршил: {item.location}
-                  </p>
+                <CardContent className="p-5 flex flex-col flex-1">
+                  <div className="flex-1">
+                    <h2 className="text-xl font-semibold mb-1">
+                      {item.hallname}
+                    </h2>
+                    <p className="text-sm text-gray-400 mb-1">
+                      Нэр: {item.name}
+                    </p>
+                    <p className="text-sm text-gray-400 mb-1">
+                      И-мэйл: {item.email}
+                    </p>
+                    <p className="text-sm text-gray-400 mb-1">
+                      Утас: {item.number}
+                    </p>
+                    <p className="text-sm text-gray-400 mb-3">
+                      Байршил: {item.location}
+                    </p>
 
-                  {item.images && item.images.length > 0 && (
-                    <div className="flex gap-2 overflow-x-auto cursor-pointer">
-                      {item.images.map((img: string, idx: number) => (
-                        <img
-                          key={idx}
-                          src={img}
-                          alt={item.hallname}
-                          className="h-24 w-24 object-cover rounded-md"
-                          onClick={() => openModal(item.images, idx)}
-                        />
-                      ))}
-                    </div>
-                  )}
-                  <div className="flex gap-2 mt-3">
+                    {item.images && item.images.length > 0 && (
+                      <div className="flex gap-2 overflow-x-auto py-2">
+                        {item.images.map((img: string, idx: number) => (
+                          <img
+                            key={idx}
+                            src={img}
+                            alt={item.hallname}
+                            className="h-24 w-24 rounded-lg object-cover cursor-pointer hover:opacity-80 transition"
+                            onClick={() => openModal(item.images, idx)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Buttons pinned to bottom */}
+                  <div className="flex gap-3 mt-4">
                     <button
                       onClick={() => handleActionClick(item.id, "accept")}
-                      className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded text-white"
+                      className="flex-1 bg-green-600/90 hover:bg-green-600 py-2 rounded-lg font-medium"
                     >
                       Accept
                     </button>
                     <button
                       onClick={() => handleActionClick(item.id, "decline")}
-                      className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white"
+                      className="bg-red-600 hover:bg-red-600 px-4 py-2 rounded-lg font-medium"
                     >
                       Decline
                     </button>
@@ -212,17 +216,17 @@ export default function AdminDashboard() {
 
         {/* Modal */}
         {modalState && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
-            <div className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm ">
+            <div className="relative max-w-[90vw] max-h-[90vh]">
               <button
-                className="absolute top-2 right-2 text-white text-3xl"
+                className="absolute top-3 right-3 text-white text-3xl hover:text-red-400"
                 onClick={closeModal}
               >
                 <X />
               </button>
 
               <button
-                className="absolute left-2 text-white text-3xl"
+                className="absolute left-3 top-1/2 -transition-y-1/2 text-white text-4xl"
                 onClick={prevImage}
               >
                 <ChevronLeft />
@@ -230,10 +234,10 @@ export default function AdminDashboard() {
               <img
                 src={modalState.images[modalState.currentIndex]}
                 alt="Modal"
-                className="object-contain max-h-[90vh] mx-auto"
+                className="max-h-[90vh] mx-auto object-contain rounded-xl shadow-2xl"
               />
               <button
-                className="absolute right-2 text-white text-3xl"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white text-4xl"
                 onClick={nextImage}
               >
                 <ChevronRight />
@@ -243,21 +247,22 @@ export default function AdminDashboard() {
         )}
         {/* Confirm Modal */}
         {selectedRequest && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-neutral-900 p-6 rounded-lg max-w-sm text-white">
+          <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
+            <div className="bg-neutral-900 border border-neutral-800 p-6 rounded-2xl shadow-2xl max-w-sm w-full text-white">
               <h2 className="text-lg font-semibold mb-4">
-                Are you sure you want to {selectedRequest.action} this request?
+                Та энэ хүсэлтийг
+                {selectedRequest.action} баталгаажуулахдаа итгэлтэй байна уу?
               </h2>
               <div className="flex justify-end gap-2">
                 <button
                   onClick={handleCancel}
-                  className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded"
+                  className="px-4 py-2 bg-gray-700 rounded-lg hover:bg-gray-600"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleConfirm}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded"
+                  className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500"
                 >
                   {loadingId === selectedRequest.id ? "Loading..." : "Confirm"}
                 </button>

@@ -124,12 +124,12 @@ export async function POST(req: NextRequest) {
           userid: user.id, // token-аас гаргасан user id
           // хүсвэл email-ийг хадгалах
           hallid: Number(hallId),
-          hostid: 1, // хэрэгтэй бол өөрчлөх
+          hostid: null, // хэрэгтэй бол өөрчлөх
           ordereddate: new Date(),
           date: new Date(date),
           starttime,
           endtime,
-          status: "pending",
+          status: "approved",
         },
       });
 

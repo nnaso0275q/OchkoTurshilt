@@ -1,14 +1,5 @@
 "use client";
 
-import HostCard from "@/components/us/Host";
-import { Header } from "@/components/us/Header";
-import { useEffect, useState } from "react";
-
-// DESIGN COMPONENTS
-import { RotateCcw } from "lucide-react";
-import { MdOutlinePersonSearch } from "react-icons/md";
-import { IoMdSearch } from "react-icons/io";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,6 +10,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import HostCard from "@/components/us/Host";
+import { RotateCcw } from "lucide-react";
+import { use, useEffect, useState } from "react";
+import { IoMdSearch } from "react-icons/io";
+import { MdOutlinePersonSearch } from "react-icons/md";
+
+// DESIGN COMPONENTS
 
 type HostDB = {
   id: number;
@@ -33,7 +31,15 @@ type HostDB = {
   price: number;
 };
 
-export default function Host() {
+const Host = ({
+  searchParams,
+}: {
+  searchParams: Promise<{ booking?: string }>;
+}) => {
+  const params = use(searchParams);
+
+  const bookingIdFromUrl = params?.booking; // Get booking ID from URL
+
   // Filter States
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string>("all");
@@ -46,6 +52,46 @@ export default function Host() {
   // Data States
   const [hosts, setHosts] = useState<HostDB[]>([]);
   const [filteredHosts, setFilteredHosts] = useState<HostDB[]>([]);
+
+  // Booking states
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
+
+  // FETCH BOOKINGS
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    fetch("/api/bookings", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const bookingsData = data.bookings || [];
+        setBookings(bookingsData);
+
+        // If booking ID is in URL, find and select that specific booking
+        if (bookingIdFromUrl && bookingsData.length > 0) {
+          const matchingBooking = bookingsData.find(
+            (b: any) => b.id === parseInt(bookingIdFromUrl)
+          );
+
+          if (matchingBooking) {
+            setSelectedBooking(matchingBooking);
+            console.log(
+              "✅ Auto-selected booking for host page:",
+              matchingBooking
+            );
+          } else {
+            setSelectedBooking(bookingsData[0]);
+          }
+        } else if (bookingsData.length > 0) {
+          setSelectedBooking(bookingsData[0]);
+        }
+      });
+  }, [bookingIdFromUrl]);
 
   // FETCH HOSTS
   useEffect(() => {
@@ -229,9 +275,14 @@ export default function Host() {
       {/* RESULTS */}
       <div className="pt-12 pb-8 flex gap-4 flex-wrap">
         {filteredHosts.map((host) => (
-          <HostCard key={host.id} host={host} />
+          <HostCard
+            key={host.id}
+            host={host}
+            selectedBooking={selectedBooking}
+          />
         ))}
       </div>
     </div>
   );
-}
+};
+export default Host;
