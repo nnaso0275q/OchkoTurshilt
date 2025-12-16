@@ -50,7 +50,6 @@ const BookingResponsePage = ({
   searchParams: Promise<{ bookingId?: string; action?: string }>;
 }) => {
   const params = use(searchParams);
-  console.log("BookingResponsePage params:", params);
 
   const bookingIdParam = params.bookingId;
   const actionParam = params.action;
@@ -175,8 +174,8 @@ const BookingResponsePage = ({
             Захиалга баталгаажлаа!
           </h1>
           <p className="text-gray-300 text-lg mb-6">
-            Таны арга хэмжээ амжилттай баталгаажсан тул дэлгэрэнгүйг доор харна
-            уу.
+            Таны арга хэмжээний захиалгууд баталгаажсан тул дэлгэрэнгүйг доор
+            харна уу.
           </p>
 
           {booking ? (
@@ -227,7 +226,7 @@ const BookingResponsePage = ({
           Захиалга татгалзлаа
         </h1>
         <p className="text-gray-300 text-lg mb-6">
-          Уучлаарай, таны захиалга батлагдаагүй. Боломжит өөр өдөр сонгоно уу.
+          Та захиалганд татгалзсан тул дэлгэрэнгүй мэдээлэл доор байна.
         </p>
 
         {booking ? (

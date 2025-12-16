@@ -60,7 +60,6 @@ export async function POST(request: Request) {
 
     // Exclude password from the returned user object
     const { password: _, ...userWithoutPassword } = user;
-    console.log(_);
 
     return NextResponse.json(
       {

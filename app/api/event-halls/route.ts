@@ -6,7 +6,7 @@ export async function GET() {
     const eventHalls = await prisma.event_halls.findMany({
       orderBy: { id: "asc" },
     });
-    console.log("--- eventHalls ---", eventHalls);
+
     return NextResponse.json({ data: eventHalls });
   } catch (error) {
     console.error("Error fetching event halls:", error);

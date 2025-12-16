@@ -1,13 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { MapPin, Star, Users, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-
 import { useRouter } from "next/navigation";
 import EventHallsSkeleton from "@/components/us/EventHallSkeleton";
 
@@ -22,39 +19,111 @@ import {
   SelectContent,
   SelectItem,
   SelectValue,
+  SelectGroup,
+  SelectLabel,
 } from "@/components/ui/select";
 import EventHallsPage from "./EventHallFilter";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 import OrderEventHall from "./OrderEventHall";
 
 export default function EventHalls() {
   const [originalHalls, setOriginalHalls] = useState<any[]>([]);
   const [filteredHalls, setFilteredHalls] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState("");
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [timeFilter, setTimeFilter] = useState<string>("");
+  const [checktoken, setChecktoken] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
-    const getData = async () => {
+    const fetchHalls = async () => {
       try {
         const res = await fetch("/api/event-halls");
         const data = await res.json();
-
         if (data) {
           setOriginalHalls(data.data);
           setFilteredHalls(data.data);
-          console.log(data.data);
         }
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        console.error(err);
       }
       setLoading(false);
     };
-
-    getData();
+    fetchHalls();
   }, []);
 
-  // SORTING
+  useEffect(() => {
+    const fetchBookings = async () => {
+      const token = localStorage.getItem("token");
+      if (token) setChecktoken(true);
+      try {
+        const res = await fetch("/api/booking-all");
+        const data = await res.json();
+        const bookingsData = data.bookings || [];
+        // Event Hall booking filter (performerId байхгүй)
+        const uniqueBookings = bookingsData.filter(
+          (b: { date: string; hallid: number }, index: number, self: any[]) =>
+            index ===
+            self.findIndex((x) => x.date === b.date && x.hallid === b.hallid)
+        );
+
+        setBookings(uniqueBookings);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchBookings();
+  }, []);
+
+  // -----------------------------
+  // Filter halls by selected date
+  // -----------------------------
+
+  useEffect(() => {
+    if (!date) return;
+
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    const selectedDateStr = `${date.getFullYear()}-${pad(
+      date.getMonth() + 1
+    )}-${pad(date.getDate())}`;
+
+    // Өдрийн booking-ууд
+    let dailyBookings = bookings.filter((b) => {
+      const bookingDate = new Date(b.date);
+      const bookingDateStr = `${bookingDate.getFullYear()}-${pad(
+        bookingDate.getMonth() + 1
+      )}-${pad(bookingDate.getDate())}`;
+      return bookingDateStr === selectedDateStr;
+    });
+
+    // Цагийн шүүлт
+    if (timeFilter === "morning") {
+      dailyBookings = dailyBookings.filter(
+        (b) => parseInt(b.starttime.split(":")[0]) < 12
+      );
+    } else if (timeFilter === "afternoon") {
+      dailyBookings = dailyBookings.filter(
+        (b) => parseInt(b.starttime.split(":")[0]) >= 12
+      );
+    }
+
+    const bookedHallIds = dailyBookings.map((b) => b.hallid);
+
+    const availableHalls = originalHalls.filter(
+      (hall) => !bookedHallIds.includes(hall.id)
+    );
+
+    setFilteredHalls(availableHalls);
+  }, [date, bookings, originalHalls, timeFilter]);
+
+  // -----------------------------
+  // Sorting
+  // -----------------------------
   useEffect(() => {
     const sorted = [...filteredHalls];
     if (sortBy === "price-low") {
@@ -102,11 +171,32 @@ export default function EventHalls() {
 
           {/* DESKTOP FILTER */}
           <div className="hidden md:block w-80">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              disabled={{ before: new Date() }}
+              className="rounded-md shadow-sm w-80 bg-neutral-900 text-gray-200"
+            />
+
+            <Select value={timeFilter} onValueChange={setTimeFilter}>
+              <SelectTrigger className="w-full mt-4 bg-neutral-900 text-white border-neutral-700">
+                <SelectValue placeholder="Цагийн нарийвчлал" />
+              </SelectTrigger>
+              <SelectContent className="w-80">
+                <SelectGroup>
+                  <SelectItem value="morning">Үдээс өмнө</SelectItem>
+                  <SelectItem value="afternoon">Үдээс хойш</SelectItem>
+                  <SelectItem value="all">Өдөрөөр нь</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+
             <EventHallsPage
               originalData={originalHalls}
               onFilterChange={setFilteredHalls}
             />
-            <OrderEventHall />
+            {checktoken && <OrderEventHall />}
           </div>
         </div>
 
@@ -116,8 +206,6 @@ export default function EventHalls() {
             <h1 className="text-4xl font-bold mb-0 md:mb-4 md:flex hidden">
               Эвэнт халл хайх
             </h1>
-
-            {/* SORT DROPDOWN ABOVE GRID */}
 
             <div className=" items-center gap-3 md:flex hidden">
               <label className="text-sm text-gray-400">Эрэмбэлэх:</label>
@@ -152,7 +240,7 @@ export default function EventHalls() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {loading && <EventHallsSkeleton />}
             {!loading &&
-              filteredHalls.map((hall) => (
+              filteredHalls?.map((hall) => (
                 <div
                   key={hall.id}
                   className="bg-neutral-900 rounded-lg overflow-hidden hover:scale-[1.02] transition-transform duration-200 flex flex-col"
@@ -175,7 +263,6 @@ export default function EventHalls() {
                     <div className="flex items-center justify-between text-gray-400 text-sm">
                       <div className="flex items-center gap-1 truncate w-[80%]">
                         <span className="flex items-center gap-1">
-                          {" "}
                           <MapPin className="z-50" size={14} />
                           {hall.location}
                         </span>
@@ -203,9 +290,9 @@ export default function EventHalls() {
                   </div>
                 </div>
               ))}
-            {!loading && filteredHalls.length === 0 && (
+            {!loading && filteredHalls?.length === 0 && (
               <div className="col-span-full text-center mt-10 text-neutral-400 text-lg">
-                Илэрц олдсонгүй.
+                Тухайн өдөрт боломжтой эвэнт холл олдсонгүй.
               </div>
             )}
           </div>

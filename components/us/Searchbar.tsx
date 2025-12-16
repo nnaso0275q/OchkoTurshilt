@@ -72,10 +72,10 @@ export default function SearchFunction({
       >
         <Input
           type="text"
-          placeholder="Хайх..."
+          placeholder="Эвэнт, дуучин, хөтлөгч хайх"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-          className={`${styleDesktop} border-neutral-600 bg-neutral-900 text-white`}
+          className={`${styleDesktop} border-neutral-600 bg-neutral-900 text-white w-50`}
         />
       </PopoverTrigger>
 

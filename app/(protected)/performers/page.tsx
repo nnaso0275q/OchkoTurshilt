@@ -50,7 +50,7 @@ const PerformersPage = ({
     isLoadingBookings,
     bookingRefs,
     handleBookingSelect,
-  } = useBookings(bookingIdFromUrl);
+  } = useBookings(bookingIdFromUrl ?? null);
   const { bookingPerformer, bookPerformer } = usePerformerBooking();
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [selectedAvailability, setSelectedAvailability] = useState<string[]>(

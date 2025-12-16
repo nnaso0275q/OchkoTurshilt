@@ -18,7 +18,6 @@ const EventHallsListing = () => {
       }
       const data = await res.json();
 
-      console.log("eventHallsData", data);
       setEventHalls(data.data || []);
     } catch (error) {
       console.error("Error fetching event halls:", error);
@@ -30,11 +29,9 @@ const EventHallsListing = () => {
   }, []);
 
   const router = useRouter();
-  console.log("Event Halls:", eventHalls);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const eventHallOnclick = (hall: any) => {
-    console.log("Clicked event hall:", hall);
     if (!hall?.id) {
       console.error("Event hall ID is missing:", hall);
       return;

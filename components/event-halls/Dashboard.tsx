@@ -52,8 +52,6 @@ export default function Dashboard() {
     error,
   } = useSWR("/api/dashboard-backend", fetcher);
 
-  console.log("Dashboard data:", { bookings, isLoading, error });
-
   if (isLoading)
     return <p className="text-white text-4xl">Ачааллаж байна...</p>;
 
@@ -68,7 +66,7 @@ export default function Dashboard() {
       </div>
     );
   }
-  console.log({ bookings });
+
   if (!bookings || bookings.length === 0)
     return (
       <div className="p-10">
@@ -100,7 +98,6 @@ export default function Dashboard() {
 
     return acc;
   }, {});
-  console.log({ grouped });
 
   // UI START (EVENTLUX HIGH-END DASHBOARD)
 
@@ -119,15 +116,20 @@ export default function Dashboard() {
             },
             {
               title: "Хүлээгдэж буй хүсэлт",
-              value: bookings.filter((b: any) => b.status === "pending").length,
+              value: Object.values(grouped).filter(
+                (item: any) => item.hallBooking?.status === "pending"
+              ).length,
+
               sub: "Дуучид болон Хөтлөгчид",
               color: "from-purple-500/20 to-purple-600/20",
             },
             {
               title: "Баталгаажсан захиалга",
-              value: bookings.filter((b: any) => b.status === "approved")
-                .length,
-              sub: "Тоглолтод бэлэн",
+              value: Object.values(grouped).filter(
+                (item: any) => item.hallBooking?.status === "approved"
+              ).length,
+
+              sub: "Бэлэн",
               color: "from-green-500/20 to-green-600/20",
             },
           ].map((kpi, i) => (
@@ -365,7 +367,7 @@ export default function Dashboard() {
                   <div className="flex gap-3 pt-6">
                     {bookingId && (
                       <Button
-                        className="hidden sm:flex items-center gap-2 rounded-2xl px-6 py-2 text-sm font-semibold text-white hover:scale-105"
+                        className="hidden sm:flex items-center gap-2 rounded-2xl px-6 py-2 text-sm font-semibold text-black hover:scale-105"
                         onClick={() =>
                           router.push(`/performers?booking=${bookingId}`)
                         }
@@ -377,7 +379,7 @@ export default function Dashboard() {
 
                     {bookingId && (
                       <Button
-                        className="hidden sm:flex items-center gap-2 rounded-2xl px-6 py-2 text-sm font-semibold text-white hover:scale-105"
+                        className="hidden sm:flex items-center gap-2 rounded-2xl px-6 py-2 text-sm font-semibold text-black hover:scale-105"
                         onClick={() =>
                           router.push(`/host?booking=${bookingId}`)
                         }

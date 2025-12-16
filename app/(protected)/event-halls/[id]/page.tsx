@@ -1,17 +1,26 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
+
+import type React from "react";
+import Image from "next/image";
+
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { FaMapMarkerAlt, FaPhone, FaParking } from "react-icons/fa";
-import { FaPeopleGroup } from "react-icons/fa6";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import { MdOutlineRestaurantMenu } from "react-icons/md";
+import {
+  MapPin,
+  Phone,
+  Car,
+  Users,
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  Star,
+  ArrowUpRight,
+} from "lucide-react";
 
-import MonthlyCalendar from "@/components/event-halls/DayCalendar";
-import { CarouselMy } from "@/components/us/CarouselMy";
+import { Skeleton } from "@/components/ui/skeleton";
+import BookingCalendar from "@/components/event-halls/DayCalendar";
 
 interface EventHall {
-  rating: number;
   id: number;
   name: string;
   location?: string | null;
@@ -26,6 +35,7 @@ interface EventHall {
   informations_about_hall: string[];
   advantages: string[];
   localtion_link?: string;
+  rating?: number;
 }
 
 export default function SelectedEventHall() {
@@ -33,9 +43,12 @@ export default function SelectedEventHall() {
   const eventHallId = params.id as string;
 
   const [eventHallData, setEventHallData] = useState<EventHall | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getSelectedEventHall = useCallback(async () => {
     if (!eventHallId) return;
+    setIsLoading(true);
     try {
       const res = await fetch(`/api/selected-event-hall`, {
         method: "POST",
@@ -44,9 +57,10 @@ export default function SelectedEventHall() {
       });
       const data = await res.json();
       setEventHallData(data.data);
-      console.log(data.data);
     } catch (error) {
       console.error("Error fetching event hall:", error);
+    } finally {
+      setIsLoading(false);
     }
   }, [eventHallId]);
 
@@ -54,134 +68,328 @@ export default function SelectedEventHall() {
     getSelectedEventHall();
   }, [getSelectedEventHall]);
 
-  return (
-    <div className="min-h-screen bg-black pb-20 overflow-y-scroll snap-y snap-mandatory">
-      {/* === Carousel Section using your CarouselMy === */}
-      {eventHallData && eventHallData.images.length > 0 && (
-        <CarouselMy
-          halls={[
-            {
-              id: eventHallData.id,
-              name: eventHallData.name,
-              title: eventHallData.name,
-              description: eventHallData.description || "",
-              duureg: "",
-              rating: eventHallData.rating || 0,
-              images: eventHallData.images,
-            },
-          ]}
-        />
-      )}
+  const nextImage = () => {
+    if (eventHallData?.images) {
+      setCurrentImageIndex((prev) => (prev + 1) % eventHallData.images.length);
+    }
+  };
 
-      <div className="max-w-6xl mx-auto space-y-6 text-white">
-        {/* Location and Contact Info */}
-        <div className="bg-neutral-900 rounded-lg p-6 my-20">
-          <div className="space-y-1">
-            <div className="text-white-100 flex gap-5 items-center">
-              <FaMapMarkerAlt size={24} color="blue" />
-              {eventHallData?.location}
-              {eventHallData?.localtion_link && (
-                <a
-                  href={eventHallData.localtion_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 underline cursor-pointer transition-colors"
-                >
-                  Show on map
-                </a>
+  const prevImage = () => {
+    if (eventHallData?.images) {
+      setCurrentImageIndex(
+        (prev) =>
+          (prev - 1 + eventHallData.images.length) % eventHallData.images.length
+      );
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
+
+  if (!eventHallData) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Event hall not found</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background text-foreground">
+      <section className="relative h-[70vh] w-full overflow-hidden">
+        <Image
+          width={1200}
+          height={800}
+          priority
+          quality={100}
+          src={
+            eventHallData.images[currentImageIndex] ||
+            "/placeholder.svg?height=800&width=1200&query=luxury event hall interior"
+          }
+          alt={eventHallData.name}
+          className="h-full w-full object-cover transition-all duration-500"
+        />
+
+        {/* Clean gradient overlay */}
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-background/20" />
+
+        {/* Hero Content */}
+        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+          <div className="max-w-400 mx-auto">
+            <div className="flex items-center gap-2 mb-3">
+              {eventHallData.rating && (
+                <span className="inline-flex items-center gap-1.5 text-sm font-medium text-foreground/80">
+                  <Star className="w-4 h-4 fill-foreground text-foreground" />
+                  {eventHallData.rating}
+                </span>
+              )}
+              <span className="text-foreground/40">·</span>
+              <span className="text-sm text-foreground/60">Premium Venue</span>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+              {eventHallData.name}
+            </h1>
+
+            {eventHallData.location && (
+              <div className="flex items-center   md:mb-3 mb-4">
+                <MapPin className="w-4 h-4" />
+                <p className=" text-foreground/60 flex items-center gap-2 truncate">
+                  {eventHallData.location}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Minimal navigation controls */}
+        {eventHallData.images.length > 1 && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-background/60 backdrop-blur-sm flex items-center justify-center hover:bg-background/80 transition-colors"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-background/60 backdrop-blur-sm flex items-center justify-center hover:bg-background/80 transition-colors"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </>
+        )}
+
+        {/* Image counter */}
+        <div className="absolute top-6 right-6 text-sm text-foreground/60 font-medium">
+          {currentImageIndex + 1} / {eventHallData.images.length}
+        </div>
+      </section>
+
+      <section className="max-w-400 mx-auto px-6 -mt-10 relative z-10">
+        <div className="flex gap-2  pb-4">
+          {eventHallData.images.map((img, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentImageIndex(idx)}
+              className={`relative h-16 w-24 shrink-0 rounded-lg overflow-hidden transition-all ${
+                idx === currentImageIndex
+                  ? "ring-2 ring-foreground"
+                  : "opacity-50 hover:opacity-80"
+              }`}
+            >
+              <Image
+                quality={100}
+                width={24}
+                height={16}
+                src={img || "/placeholder.svg"}
+                alt={`View ${idx + 1}`}
+                className="h-full w-full object-cover"
+              />
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="max-w-400 mx-auto px-6 mt-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <InfoCard
+            icon={<MapPin className="h-4 w-4" />}
+            label="Байршил"
+            value={eventHallData.location || "—"}
+            link={eventHallData.localtion_link}
+          />
+          <InfoCard
+            icon={<Users className="h-4 w-4" />}
+            label="Хүчин чадал"
+            value={eventHallData.capacity || "—"}
+          />
+          <InfoCard
+            icon={<Car className="h-4 w-4" />}
+            label="Зогсоол"
+            value={
+              eventHallData.parking_capacity
+                ? `${eventHallData.parking_capacity} машины`
+                : "—"
+            }
+          />
+          <div>
+            <InfoCard
+              icon={<Phone className="h-4 w-4" />}
+              label="Утас"
+              value={eventHallData.phonenumber || "—"}
+              isPhone
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-400 mx-auto px-6 mt-16">
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Left Column - Description */}
+          <div className="lg:col-span-2 space-y-10">
+            {/* Description */}
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Тайлбар</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                {eventHallData.description}
+              </p>
+
+              {eventHallData.advantages.length > 0 && (
+                <div className="mt-8">
+                  <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
+                    Давуу талууд
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {eventHallData.advantages.map((adv, i) => (
+                      <span
+                        key={i}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary text-sm"
+                      >
+                        <Check className="w-3.5 h-3.5" />
+                        {adv}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
+
+            {/* Suitable Events */}
+            {eventHallData.suitable_events.length > 0 && (
+              <div>
+                <h2 className="text-xl font-semibold mb-4">
+                  Тохиромжтой эвентүүд
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {eventHallData.suitable_events.map((event, i) => (
+                    <span
+                      key={i}
+                      className="px-4 py-2 rounded-full border border-border text-sm"
+                    >
+                      {event}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="p-4 flex gap-16 flex-wrap">
-            <div className="flex items-center gap-2">
-              <FaPhone color="blue" />
-              <strong>Утас:</strong> {eventHallData?.phonenumber}
-            </div>
-            <div className="flex items-center gap-2">
-              <FaPeopleGroup size={24} color="blue" />
-              <strong>Хүчин чадал:</strong> {eventHallData?.capacity}
-            </div>
-            <div className="flex items-center gap-2">
-              <MdOutlineRestaurantMenu size={24} color="blue" />
-              <strong>Меню:</strong> {eventHallData?.menu.join(", ")}
-            </div>
-            <div className="flex items-center gap-2">
-              <FaParking size={24} color="blue" />
-              <strong>Машины зогсоол:</strong> {eventHallData?.parking_capacity}
-            </div>
-          </div>
-        </div>
-
-        {/* Main Info */}
-        <div className="bg-neutral-900 rounded-lg">
-          <div className="p-6 space-y-4">
-            <p>{eventHallData?.description}</p>
-
-            <ul className="pl-6 space-y-1">
-              {eventHallData?.advantages?.map((advantage, index) => (
-                <li key={index} className="flex gap-2 items-center">
-                  <IoMdCheckmarkCircleOutline className="text-green-400 shrink-0" />
-                  {advantage}
-                </li>
-              ))}
-            </ul>
-
-            <p>
-              <strong>Хаяг:</strong> {eventHallData?.location}
-            </p>
+          {/* Right Column - Details */}
+          <div className="space-y-6">
+            {eventHallData.additional_informations.length > 0 && (
+              <DetailCard
+                title="Нэмэлт мэдээлэл"
+                items={eventHallData.additional_informations}
+              />
+            )}
+            {eventHallData.informations_about_hall.length > 0 && (
+              <DetailCard
+                title="Танхимын мэдээлэл"
+                items={eventHallData.informations_about_hall}
+              />
+            )}
           </div>
         </div>
+      </section>
 
-        {/* Additional Info & Suitable Events */}
-        <div className="flex flex-col lg:flex-row justify-between my-20 gap-6">
-          <div className="p-6 space-y-4 bg-neutral-900 rounded-lg flex-1">
-            <h3 className="text-2xl font-bold text-white border-b-2 border-blue-500 pb-2 mb-4">
-              Нэмэлт мэдээлэл
-            </h3>
-            <ul className="pl-6 space-y-1">
-              {eventHallData?.additional_informations?.map((info, idx) => (
-                <li key={idx} className="flex gap-2 items-center">
-                  <IoMdCheckmarkCircleOutline className="text-green-400 shrink-0" />
-                  {info}
-                </li>
-              ))}
-            </ul>
-          </div>
+      <section className="max-w-400 mx-auto px-6 mt-20 mb-24">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold">Захиалгын хуанли</h2>
+          <p className="mt-2 text-muted-foreground">
+            Өөрт тохирох өдөр, цагаа сонгоно уу
+          </p>
+        </div>
+        <BookingCalendar eventHallData={eventHallData} hallId={eventHallId} />
+      </section>
+    </div>
+  );
+}
 
-          <div className="p-6 space-y-4 bg-neutral-900 rounded-lg flex-1">
-            <h3 className="text-2xl font-bold text-white border-b-2 border-blue-500 pb-2 mb-4">
-              Тохиромжтой хүлээн авалтууд
-            </h3>
-            <ul className="pl-6 space-y-1">
-              {eventHallData?.suitable_events?.map((event, idx) => (
-                <li key={idx} className="flex gap-2 items-center">
-                  <IoMdCheckmarkCircleOutline className="text-green-400 shrink-0" />
-                  {event}
-                </li>
-              ))}
-            </ul>
-          </div>
+function InfoCard({
+  icon,
+  label,
+  value,
+  link,
+  isPhone,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  link?: string;
+  isPhone?: boolean;
+}) {
+  const content = (
+    <div className="p-4 rounded-xl bg-card border border-border hover:border-foreground/20 transition-colors group">
+      <div className="flex items-center gap-2 mb-2 text-muted-foreground">
+        {icon}
+        <span className="text-xs font-medium uppercase tracking-wide">
+          {label}
+        </span>
+      </div>
+      <p className="font-medium flex items-center gap-1.5">
+        {value}
 
-          <div className="p-6 space-y-3 bg-neutral-900 rounded-lg flex-1">
-            <h3 className="text-2xl font-bold text-white border-b-2 border-blue-500 pb-2 mb-4">
-              Танхимын мэдээлэл
-            </h3>
-            <ul className="list-disc pl-6 space-y-1">
-              {eventHallData?.informations_about_hall?.map((info, idx) => (
-                <li key={idx} className="flex gap-2 items-center">
-                  <IoMdCheckmarkCircleOutline className="text-green-400 shrink-0" />
-                  {info}
-                </li>
-              ))}
-            </ul>
-          </div>
+        {link && (
+          <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+        )}
+      </p>
+      {label === "Утас" && (
+        <span className="bg-transparent text-transparent">aaaaaaa</span>
+      )}
+    </div>
+  );
+
+  if (link) {
+    return (
+      <a href={link} target="_blank" rel="noopener noreferrer">
+        {content}
+      </a>
+    );
+  }
+
+  if (isPhone && value !== "—") {
+    return <a href={`tel:${value}`}>{content}</a>;
+  }
+
+  return content;
+}
+
+function DetailCard({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="p-5 rounded-xl bg-card border border-border">
+      <h3 className="font-semibold mb-4">{title}</h3>
+      <ul className="space-y-3">
+        {items.map((item, i) => (
+          <li key={i} className="flex items-start gap-3 text-sm">
+            <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-foreground/40 shrink-0" />
+            <span className="text-muted-foreground">{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Skeleton className="h-[70vh] w-full" />
+      <div className="max-w-400 mx-auto px-6  relative z-10 mt-23"></div>
+      <div className="max-w-400 mx-auto px-6 mt-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-24 rounded-xl" />
+          ))}
         </div>
       </div>
-
-      {/* Calendar */}
-      <div className="max-w-6xl mx-auto my-20">
-        <MonthlyCalendar hallId={eventHallId} />
+      <div className="max-w-400 mx-auto px-6 mt-16 grid lg:grid-cols-3 gap-8">
+        <Skeleton className="lg:col-span-2 h-64 rounded-xl" />
+        <div className="space-y-6">
+          <Skeleton className="h-40 rounded-xl" />
+          <Skeleton className="h-40 rounded-xl" />
+        </div>
       </div>
     </div>
   );

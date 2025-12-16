@@ -44,6 +44,8 @@ model event_halls {
   rating                  String?
   location_link           String?
   duureg                  String?
+  owner_id                Int?
+  owner                   mruser?   @relation(fields: [owner_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
   booking                 booking[]
 }
 
@@ -83,15 +85,16 @@ model performers {
 }
 
 model mruser {
-  id         Int       @id(map: "User_pkey") @default(autoincrement())
-  name       String    @db.VarChar(255)
-  email      String    @unique(map: "User_email_key") @db.VarChar(255)
-  password   String    @db.VarChar(255)
-  role       String    @db.VarChar(50)
-  createdat  DateTime? @default(now()) @db.Timestamp(6)
-  updatedate DateTime? @db.Timestamptz(6)
-  phone      String?   @db.VarChar(20)
-  booking    booking[]
+  id          Int           @id(map: "User_pkey") @default(autoincrement())
+  name        String        @db.VarChar(255)
+  email       String        @unique(map: "User_email_key") @db.VarChar(255)
+  password    String        @db.VarChar(255)
+  role        String        @db.VarChar(50)
+  createdat   DateTime?     @default(now()) @db.Timestamp(6)
+  updatedate  DateTime?     @db.Timestamptz(6)
+  phone       String?       @db.VarChar(20)
+  booking     booking[]
+  event_halls event_halls[]
 }
 
 model performers_new {

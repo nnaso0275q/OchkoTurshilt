@@ -80,10 +80,6 @@ const Host = ({
 
           if (matchingBooking) {
             setSelectedBooking(matchingBooking);
-            console.log(
-              "✅ Auto-selected booking for host page:",
-              matchingBooking
-            );
           } else {
             setSelectedBooking(bookingsData[0]);
           }
@@ -153,7 +149,7 @@ const Host = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#09090D] text-white px-32">
+    <div className="min-h-screen bg-[#09090D] text-white px-32 w-full">
       <h1 className="text-3xl font-bold mb-6 pt-[108px] pb-[72px] text-center">
         Discover Your Ideal Host or MC
       </h1>

@@ -52,7 +52,7 @@ export default function AdminDashboard() {
   } | null>(null);
   const getUserBookings = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/api/user-bookings`, {
+      const res = await fetch(`/api/user-bookings`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,8 +73,6 @@ export default function AdminDashboard() {
       console.error("Error fetching event hall:", error);
     }
   };
-
-  console.log("userbookings", userBookings);
 
   useEffect(() => {
     getUserBookings();

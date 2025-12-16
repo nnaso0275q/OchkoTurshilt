@@ -46,7 +46,7 @@ export function useGenres() {
   return genres;
 }
 
-export function useBookings(bookingIdFromUrl: string | null | undefined) {
+export function useBookings(bookingIdFromUrl: string | null) {
   const [bookings, setBookings] = useState<any[]>([]);
   const [allBookings, setAllBookings] = useState<any[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
@@ -84,8 +84,6 @@ export function useBookings(bookingIdFromUrl: string | null | undefined) {
           }
         );
 
-        console.log("Filtered bookings:", uniqueBookings);
-
         setBookings(uniqueBookings);
         setAllBookings(uniqueBookings);
 
@@ -97,7 +95,6 @@ export function useBookings(bookingIdFromUrl: string | null | undefined) {
 
           if (matchingBooking) {
             setSelectedBooking(matchingBooking);
-            console.log("✅ Auto-selected booking from URL:", matchingBooking);
 
             setTimeout(() => {
               if (bookingRefs.current[matchingBooking.id]) {

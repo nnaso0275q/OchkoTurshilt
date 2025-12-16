@@ -36,13 +36,6 @@ async function addUser() {
         phone: "88888888",
       },
     });
-
-    console.log("✅ User created successfully!");
-    console.log("👤 Name:", user.name);
-    console.log("📧 Email:", user.email);
-    console.log("🔑 Password:", password);
-    console.log("👤 Role:", user.role);
-    console.log("🆔 User ID:", user.id);
   } catch (error: any) {
     if (error.code === "P2002") {
       console.error("❌ Error: User with this email already exists!");

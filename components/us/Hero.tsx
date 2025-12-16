@@ -28,14 +28,14 @@ export const Hero = () => {
   }, []);
 
   return (
-    <section className="bg-black text-white w-full min-h-screen flex flex-col justify-start snap-start overflow-hidden py-16 lg:py-24">
+    <section className="bg-black text-white w-full min-h-screen flex flex-col justify-start  overflow-hidden py-16 lg:py-20">
       <div className="container mx-auto px-4 text-center">
         {/* Main Hero Text */}
         <h2
           className="font-extrabold text-5xl lg:text-8xl mb-4 animate-fade-in-up"
           style={{ animationDelay: "200ms" }}
         >
-          Featured Event Halls
+          Онцлох Танхим
         </h2>
         <p
           className="max-w-3xl mx-auto text-lg text-blue-600 animate-fade-in-up"
@@ -49,7 +49,7 @@ export const Hero = () => {
 
       {/* Featured Cards Grid */}
       <div className="container mx-auto px-4 mt-12 lg:mt-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
           {originalHalls.slice(0, 6).map((hall, index) => (
             <div
               key={hall.id}
@@ -72,7 +72,9 @@ export const Hero = () => {
 
               <div className="p-5">
                 <h3 className="text-xl font-bold text-white">{hall.name}</h3>
-                <p className="text-sm text-neutral-400 mt-1">{hall.location}</p>
+                <p className="text-sm text-neutral-400 mt-1 truncate">
+                  {hall.location}
+                </p>
 
                 <div className="flex justify-between items-center mt-4 pt-4 border-t border-neutral-800 text-sm text-neutral-300">
                   {/* Capacity */}
@@ -81,7 +83,7 @@ export const Hero = () => {
                     title="Хүний багтаамж"
                   >
                     <Users className="w-4 h-4 text-neutral-400" />
-                    <span>{hall.capacity} хүн</span>
+                    <span className="text-sm">{hall.capacity} хүн</span>
                   </div>
 
                   {/* Price */}
@@ -91,7 +93,7 @@ export const Hero = () => {
                   </div>
 
                   {/* Rating */}
-                  <div className="flex items-center gap-1.5" title="Үнэлгээ">
+                  <div className="flex items-center  gap-1.5" title="Үнэлгээ">
                     <Star className="w-4 h-4 text-yellow-500" />
                     <span>{hall.rating}</span>
                   </div>

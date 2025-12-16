@@ -54,7 +54,7 @@ export default function ConfirmationModal({
 
   const handleConfirm = async () => {
     setIsLoading(true);
-    console.log("Handling confirm for request2:", request);
+
     try {
       const response = await fetch("/api/profileapprove", {
         method: "POST",

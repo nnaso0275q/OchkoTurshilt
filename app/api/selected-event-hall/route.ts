@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
         { status: 404 }
       );
     }
-    console.log("selectedEventHall", selectedEventHall);
+
     return NextResponse.json({ data: selectedEventHall });
   } catch (error) {
     console.error("Error fetching event hall:", error);

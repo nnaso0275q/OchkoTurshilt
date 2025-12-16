@@ -31,32 +31,8 @@ export const CarouselMy = ({ halls }: { halls?: HallType[] }) => {
 
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
-  const [originalHalls, setOriginalHalls] = useState<any[]>(halls || []);
-  const [filteredHalls, setFilteredHalls] = useState<any[]>(halls || []);
-  const [loading, setLoading] = useState(!halls?.length);
+
   const plugin = React.useRef(Autoplay({ delay: 2000 }));
-
-  useEffect(() => {
-    if (originalHalls.length > 0) return; // Already have halls, no need to fetch
-
-    const getData = async () => {
-      try {
-        const res = await fetch("/api/event-halls");
-        const data = await res.json();
-
-        if (data) {
-          setOriginalHalls(data.data);
-          setFilteredHalls(data.data);
-          console.log(data.data);
-        }
-      } catch (e) {
-        console.error(e);
-      }
-      setLoading(false);
-    };
-
-    getData();
-  }, [originalHalls]);
 
   React.useEffect(() => {
     if (!api) return;
@@ -67,17 +43,15 @@ export const CarouselMy = ({ halls }: { halls?: HallType[] }) => {
     api.on("select", () => setCurrent(api.selectedScrollSnap() + 1));
   }, [api]);
 
-  if (loading) return <div className="text-white">Loading...</div>;
-
   return (
-    <div className="relative w-full h-[60vh] sm:h-screen snap-start">
+    <div className="relative w-full h-[60vh] sm:h-screen">
       <CarouselDefault
         setApi={setApi}
         plugins={[plugin.current]}
         className="w-full h-full"
       >
         <CarouselContent className="w-full h-full">
-          {originalHalls.slice(0, 5).map((el: HallType) => (
+          {halls?.slice(0, 5).map((el: HallType) => (
             <CarouselCard key={el.id} el={el} />
           ))}
         </CarouselContent>
@@ -124,7 +98,7 @@ const CarouselCard = ({ el }: { el: HallType }) => {
 
         <CardContent className="hidden sm:flex flex-col absolute top-8/17 left-[6%] lg:left-[12%] -translate-y-1/3 text-white">
           <p className="mb-0 font-medium text-sm lg:text-base [text-shadow:0_1px_3px_rgb(0_0_0/0.5)]">
-            Event Hall:
+            Танхим:
           </p>
           <h1 className="font-extrabold text-4xl lg:text-6xl [text-shadow:0_2px_4px_rgb(0_0_0/0.5)]">
             {el.name}
@@ -154,13 +128,13 @@ const CarouselCard = ({ el }: { el: HallType }) => {
             onClick={() => router.push(`/event-halls/${el.id}`)}
             className="mt-4 w-fit bg-white/90 text-black font-bold py-2 px-6 rounded-md hover:bg-white transition-colors"
           >
-            More Info
+            Мэдээлэл
           </button>
         </CardContent>
 
         <CardContent className="sm:hidden absolute inset-0 mt-0 flex flex-col justify-center p-6 text-white z-10">
           <p className="mb-1 font-medium text-[14px] [text-shadow:0_1px_3px_rgb(0_0_0/0.5)]">
-            Event Hall:
+            Танхим:
           </p>
           <h1 className="font-bold text-2xl mb-1 [text-shadow:0_2px_4px_rgb(0_0_0/0.5)]">
             {el.name}
@@ -188,7 +162,7 @@ const CarouselCard = ({ el }: { el: HallType }) => {
             onClick={() => router.push(`/event-halls/${el.id}`)}
             className="mt-3 w-fit bg-white/90 text-black font-bold py-1.5 px-4 rounded-md text-sm hover:bg-white transition-colors"
           >
-            More Info
+            Мэдээлэл
           </button>
         </CardContent>
       </Card>

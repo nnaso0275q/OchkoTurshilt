@@ -98,7 +98,7 @@ export default function EventHallForm() {
       setEmail("");
       setImages([]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       alert("Алдаа гарлаа");
     } finally {
       setLoading(false);

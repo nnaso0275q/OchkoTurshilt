@@ -11,7 +11,7 @@ import {
 
 export function LayoutFooter() {
   return (
-    <footer className="w-full bg-black text-gray-200 border-t border-neutral-800 snap-start">
+    <footer className="w-full bg-black text-gray-200 border-t border-neutral-800">
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand & Social */}

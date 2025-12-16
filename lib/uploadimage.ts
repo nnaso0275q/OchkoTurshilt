@@ -7,7 +7,6 @@ export async function uploadImageToCloudinary(base64: string) {
     });
     return result.secure_url;
   } catch (error) {
-    console.log("Cloudinary upload error:", error);
     throw error;
   }
 }

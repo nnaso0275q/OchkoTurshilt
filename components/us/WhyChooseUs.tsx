@@ -5,27 +5,27 @@ import { useInView } from "react-intersection-observer";
 const features = [
   {
     icon: <Layers className="w-10 h-10 text-blue-500" />,
-    title: "Vast Selection",
+    title: "Өргөн сонголт",
     description:
-      "Explore a diverse range of top-quality event halls, from intimate lofts to grand ballrooms, all in one place.",
+      "Бидний платформд жижиг хувийн өрөөнөөс эхлээд том заал хүртэлх төрөл бүрийн чанартай танхимуудыг нэг дороос хайж, захиалах боломжтой.",
   },
   {
     icon: <CalendarCheck className="w-10 h-10 text-blue-500" />,
-    title: "Seamless Booking",
+    title: "Хялбар захиалга",
     description:
-      "Our intuitive platform makes it easy to check availability, get quotes, and book your perfect venue in minutes.",
+      "Бидний ухаалаг платформ таныг танхимын боломжийг шалгах, үнийн санал авах, хамгийн тохиромжтой газраа хэдхэн минутанд захиалах боломжийг олгодог.",
   },
   {
     icon: <Music className="w-10 h-10 text-blue-500" />,
-    title: "Talented Performers",
+    title: "Мэргэжлийн уран бүтээлчид",
     description:
-      "Elevate your event by hiring from our curated list of professional musicians, DJs, and entertainers.",
+      "Таны арга хэмжээг мэргэжлийн хөгжмийн баг, DJ, бусад үзвэр үйлчилгээ үзүүлэгчдээс сонгон илүү чанартай, хөгжилтэй болгоно.",
   },
   {
     icon: <ShieldCheck className="w-10 h-10 text-blue-500" />,
-    title: "Verified & Trusted",
+    title: "Баталгаатай & Найдвартай",
     description:
-      "Every venue and performer on our platform is verified to ensure you receive the highest quality and reliability.",
+      "Манай платформ дахь бүх танхим болон уран бүтээлчид баталгаажсан тул та хамгийн өндөр чанар, найдвартай үйлчилгээг авна.",
   },
 ];
 
@@ -77,7 +77,7 @@ export const WhyChooseUs = () => {
   return (
     <section
       ref={ref}
-      className="relative text-white min-h-screen flex flex-col justify-center overflow-hidden snap-start py-12 bg-cover bg-center bg-fixed"
+      className="relative text-white min-h-screen flex flex-col justify-center overflow-hidden  py-12 bg-cover bg-center bg-fixed"
       style={{
         backgroundImage:
           "url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2070&auto=format&fit=crop')",
@@ -93,17 +93,17 @@ export const WhyChooseUs = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12 lg:mb-16">
-          <h2 className="font-extrabold text-4xl lg:text-5xl mb-4">
-            Why Choose Us?
+          <h2 className="font-extrabold text-4xl lg:text-5xl mb-4 md:mt-0 mt-3">
+            Яагаад биднийг сонгох естой вэ?
           </h2>
           <p className="max-w-2xl mx-auto text-lg text-neutral-400">
-            We provide an all-in-one solution to make your event planning
-            effortless and exceptional.
+            Бид таны арга хэмжээг төлөвлөх процессыг хялбар, онцгой болгох
+            бүхнийг нэг дороос шийдэж өгдөг.
           </p>
         </div>
 
         {/* Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-8 gap-3">
           {features.map((feature, idx) => (
             <div
               key={idx}

@@ -19,9 +19,6 @@ export async function GET(request: Request) {
     // 2. Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as any;
 
-    // DEBUG: If needed you can temporarily log decoded:
-    // console.log("Decoded JWT:", decoded);
-
     if (!decoded.id) {
       return NextResponse.json(
         { error: "Invalid token payload", payload: decoded },

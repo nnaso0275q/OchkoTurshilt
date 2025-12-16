@@ -6,7 +6,6 @@ import nodemailer from "nodemailer";
 export async function POST(req: NextRequest) {
   try {
     const { performerId, hallId, starttime, bookeddate } = await req.json();
-    console.log({ bookeddate });
 
     if (!performerId || !hallId) {
       return NextResponse.json(

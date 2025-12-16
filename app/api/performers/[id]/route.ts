@@ -7,7 +7,6 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  console.log("API Route: Fetching performer with ID:", id);
   try {
     const performer = await prisma.performers.findUnique({
       where: {
