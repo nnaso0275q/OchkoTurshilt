@@ -94,10 +94,27 @@ export default function SelectedEventHall() {
       </div>
     );
   }
+  const Mockimages = [{ src: "/zurag1.jpg" }, { src: "/zurag2.jpg" }];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <section className="relative h-[70vh] w-full overflow-hidden">
+        {eventHallData.id === 3 && (
+          <div>
+            {Mockimages.map((_, index) => (
+              <Image
+                src={`${_.src}`}
+                key={index}
+                alt="Special Image"
+                width={1200}
+                height={800}
+                priority
+                quality={100}
+                className="absolute inset-0 h-full w-full object-cover transition-all duration-500"
+              />
+            ))}
+          </div>
+        )}
         <Image
           width={1200}
           height={800}
@@ -169,26 +186,52 @@ export default function SelectedEventHall() {
 
       <section className="max-w-400 mx-auto px-6 -mt-10 relative z-10">
         <div className="flex gap-2  pb-4">
-          {eventHallData.images.map((img, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentImageIndex(idx)}
-              className={`relative h-16 w-24 shrink-0 rounded-lg overflow-hidden transition-all ${
-                idx === currentImageIndex
-                  ? "ring-2 ring-foreground"
-                  : "opacity-50 hover:opacity-80"
-              }`}
-            >
-              <Image
-                quality={100}
-                width={24}
-                height={16}
-                src={img || "/placeholder.svg"}
-                alt={`View ${idx + 1}`}
-                className="h-full w-full object-cover"
-              />
-            </button>
-          ))}
+          {eventHallData.id === 3 ? (
+            <div>
+              {Mockimages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`relative h-16 w-24 shrink-0 rounded-lg overflow-hidden transition-all mr-5 ${
+                    index === currentImageIndex ? "ring-2 ring-foreground" : ""
+                  }`}
+                >
+                  <Image
+                    quality={100}
+                    width={40}
+                    height={40}
+                    src={_.src}
+                    alt={`View ${index + 1}`}
+                    className="h-full w-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div>
+              {" "}
+              {eventHallData.images.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentImageIndex(idx)}
+                  className={`relative h-16 w-24 shrink-0 rounded-lg overflow-hidden transition-all ${
+                    idx === currentImageIndex
+                      ? "ring-2 ring-foreground"
+                      : "opacity-50 hover:opacity-80"
+                  }`}
+                >
+                  <Image
+                    quality={100}
+                    width={24}
+                    height={16}
+                    src={img || "/placeholder.svg"}
+                    alt={`View ${idx + 1}`}
+                    className="h-full w-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

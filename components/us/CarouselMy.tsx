@@ -52,7 +52,7 @@ export const CarouselMy = ({ halls }: { halls?: HallType[] }) => {
       >
         <CarouselContent className="w-full h-full">
           {halls?.slice(0, 5).map((el: HallType) => (
-            <CarouselCard key={el.id} el={el} />
+            <CarouselCard key={el.id} el={el} Mockimages={Mockimages} />
           ))}
         </CarouselContent>
 
@@ -77,17 +77,38 @@ export const CarouselMy = ({ halls }: { halls?: HallType[] }) => {
     </div>
   );
 };
+const Mockimages = [
+  { title: "zurag1", src: "/zurag1.jpg" },
+  { title: "zurag2", src: "/zurag2.jpg" },
+  { title: "zurag3", src: "/zurag3.jpg" },
+];
 
-const CarouselCard = ({ el }: { el: HallType }) => {
+const CarouselCard = ({
+  el,
+  Mockimages,
+}: {
+  el: HallType;
+  Mockimages: any[];
+}) => {
   const router = useRouter();
   return (
     <CarouselItem className="relative w-full h-[60vh] sm:h-screen p-0">
       <Card className="w-full h-full p-0 border-0 ml-[16] shadow-none rounded-none relative">
-        <Image
+        {/* <Image
           src={
             el.images[0] ||
             "https://img.freepik.com/premium-vector/image-icon-design-vector-template_1309674-943.jpg"
           }
+          alt={el.name}
+          fill={true}
+          priority
+          sizes="100vw"
+          className="objec
+          t-cover"
+        /> */}
+
+        <Image
+          src={`${Mockimages[el.id % Mockimages.length].src}`}
           alt={el.name}
           fill={true}
           priority
