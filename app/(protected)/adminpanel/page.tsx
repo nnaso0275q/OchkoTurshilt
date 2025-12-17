@@ -267,7 +267,6 @@ export default function AdminDataManagement() {
 
   return (
     <div className="bg-black min-h-screen text-white">
-      <Header />
       <main className="container mx-auto p-4 md:p-8">
         <h1 className="text-4xl font-bold mb-8 bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
           Админ удирдлагын самбар

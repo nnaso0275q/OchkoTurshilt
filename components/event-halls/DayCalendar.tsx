@@ -643,7 +643,6 @@ export function BookingCalendar({
 
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         <div className="w-full lg:flex-1 border border-neutral-800 rounded-xl p-4 lg:p-6 bg-black relative group">
-          {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg sm:text-xl font-semibold text-white">
               {currentYear} оны {monthNames[currentMonth]}

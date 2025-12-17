@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
 import RequestsList from "./ProfiledAshilgah3";
 import ConfirmationModal from "./ProfiledAshiglah";
-import { Header } from "@/components/us/Header";
 
 interface Request {
   id: string;
@@ -106,7 +105,6 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <Header></Header>
       <main className="min-h-screen  from-background via-background to-muted/30 p-4 md:p-8">
         <div className="mx-auto max-w-4xl">
           <div className="mb-8 ">

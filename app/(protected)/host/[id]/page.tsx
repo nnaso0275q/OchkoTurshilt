@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { Header } from "@/components/us/Header";
 
 import { Star, Mail, Phone, Calendar, Users, Award } from "lucide-react";
 

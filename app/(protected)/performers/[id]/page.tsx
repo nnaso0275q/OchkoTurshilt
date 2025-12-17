@@ -154,8 +154,6 @@ export default function PerformerDetailPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* <Header /> */}
-
       {performer.music_url && <div id="youtube-player"></div>}
 
       {performer.music_url && (

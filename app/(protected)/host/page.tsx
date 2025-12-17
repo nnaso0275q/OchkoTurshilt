@@ -132,7 +132,6 @@ const Host = ({
 
   return (
     <div className="min-h-screen bg-black text-white px-4 sm:px-6 lg:px-12 xl:px-24">
-      {/* Header */}
       <div className="pt-20 pb-10 sm:pt-24 sm:pb-12 text-center">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
           Хөтлөгч хайх

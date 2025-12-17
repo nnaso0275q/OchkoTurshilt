@@ -49,7 +49,6 @@ export default function BookingsList({
                   : "border-neutral-700/40"
               }`}
             >
-              {/* Header */}
               <div className="flex justify-between items-center mb-3">
                 <h2 className="text-lg font-semibold text-white">
                   {b.event_halls?.name ?? "Event Hall"}

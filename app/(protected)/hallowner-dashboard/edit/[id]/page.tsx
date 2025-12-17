@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Header } from "@/components/us/Header";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -110,7 +110,6 @@ export default function EditHallPage() {
 
   return (
     <div className="bg-black min-h-screen text-white">
-      <Header />
       <main className="container mx-auto p-4 md:p-8 max-w-4xl">
         <div className="mb-8">
           <button

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "@/components/us/Header";
+
 import {
   Building2,
   Calendar,
@@ -127,7 +127,6 @@ export default function HallOwnerDashboard() {
 
   return (
     <div className="bg-black min-h-screen text-white">
-      <Header />
       <main className="container mx-auto p-4 md:p-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
