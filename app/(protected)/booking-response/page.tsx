@@ -5,9 +5,9 @@ import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
 interface Booking {
   id: number;
-  status: "approved" | "cancelled";
+  status: "approved" | "cancelled" | "pending";
   event_halls: { name: string };
-  User: { name: string };
+  User: { name: string; phone?: string };
   performers: { name: string };
   date: string;
   starttime: string;
@@ -47,17 +47,24 @@ const Info = ({ label, value }: { label: string; value: string }) => (
 const BookingResponsePage = ({
   searchParams,
 }: {
-  searchParams: Promise<{ bookingId?: string; action?: string }>;
+  searchParams: Promise<{
+    bookingId?: string;
+    action?: string;
+    hallId?: string;
+    totalPrice?: string;
+  }>;
 }) => {
   const params = use(searchParams);
 
   const bookingIdParam = params.bookingId;
   const actionParam = params.action;
+  const hallIdParam = params.hallId;
+  const totalPriceParam = params.totalPrice;
   const [booking, setBooking] = useState<Booking | null>(null);
   const [loading, setLoading] = useState(true);
-  const [status, setStatus] = useState<"loading" | "accepted" | "declined">(
-    "loading"
-  );
+  const [status, setStatus] = useState<
+    "loading" | "accepted" | "declined" | "view"
+  >("loading");
   const [message, setMessage] = useState(
     "Захиалгын статус өөрчлөгдөж байна..."
   );
@@ -93,17 +100,75 @@ const BookingResponsePage = ({
   };
 
   useEffect(() => {
+    console.log("booking-response params:", {
+      bookingIdParam,
+      actionParam,
+      hallIdParam,
+      totalPriceParam,
+    });
+
     if (
       bookingIdParam &&
       (actionParam === "approve" || actionParam === "decline")
     ) {
       handleBookingResponse(Number(bookingIdParam), actionParam);
+    } else if (bookingIdParam && !actionParam) {
+      // QR code scan case - just view booking details
+      console.log("Fetching booking details for:", bookingIdParam);
+      fetchBookingDetails(Number(bookingIdParam));
     } else {
+      console.log("No valid params, showing declined");
       setLoading(false);
       setStatus("declined");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookingIdParam, actionParam]);
+
+  const fetchBookingDetails = async (bookingId: number, retryCount = 0) => {
+    console.log(
+      `fetchBookingDetails attempt ${retryCount + 1} for booking:`,
+      bookingId
+    );
+    try {
+      const res = await fetch(`/api/bookings/${bookingId}`);
+      console.log("API response status:", res.status);
+      const data = await res.json();
+      console.log("API response data:", data);
+
+      if (data.success && data.booking) {
+        console.log("Booking found:", data.booking);
+        setBooking(data.booking);
+        setStatus("view");
+        setMessage("Захиалга амжилттай уншигдлаа.");
+        setLoading(false);
+      } else {
+        console.log("Booking not found, retry count:", retryCount);
+        // Retry up to 3 times if booking not found (might be race condition)
+        if (retryCount < 3) {
+          setTimeout(() => {
+            fetchBookingDetails(bookingId, retryCount + 1);
+          }, 1000);
+          return;
+        }
+        console.log("Max retries reached, showing declined");
+        setStatus("declined");
+        setMessage("Захиалга олдсонгүй.");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("fetchBookingDetails error:", error);
+      // Retry on error
+      if (retryCount < 3) {
+        setTimeout(() => {
+          fetchBookingDetails(bookingId, retryCount + 1);
+        }, 1000);
+        return;
+      }
+      setStatus("declined");
+      setMessage("Захиалгын мэдээлэл татахад алдаа гарлаа.");
+      setLoading(false);
+    }
+  };
 
   const handleBookingResponse = async (
     bookingId: number,
@@ -209,6 +274,85 @@ const BookingResponsePage = ({
           >
             Бусад захиалга руу буцах
           </button> */}
+        </div>
+      </div>
+    );
+  }
+
+  // ---------- View Only UI (QR Code Scan) ----------
+  if (status === "view") {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-8">
+        <div className="text-center max-w-2xl w-full">
+          <div className="flex justify-center mb-6">
+            <CheckCircle2 className="w-20 h-20 text-blue-500" />
+          </div>
+
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
+            Захиалгын мэдээлэл
+          </h1>
+          <p className="text-gray-300 text-base mb-6">
+            Таны захиалгын дэлгэрэнгүй мэдээллийг доор харна уу.
+          </p>
+
+          {booking ? (
+            <div className="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
+              <h2 className="text-lg font-semibold text-blue-400 mb-4">
+                Захиалгын дэлгэрэнгүй
+              </h2>
+              <Info label="Захиалгын дугаар" value={`#${booking.id}`} />
+              <Info label="Танхим" value={booking.event_halls.name} />
+              <Info
+                label="Өдөр"
+                value={new Date(booking.date).toLocaleDateString("mn-MN", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              />
+              <Info label="Эхлэх цаг" value={booking.starttime} />
+              <Info label="Захиалагч" value={booking.User.name} />
+              {booking.User.phone && (
+                <Info label="Утас" value={booking.User.phone} />
+              )}
+              {totalPriceParam && (
+                <Info
+                  label="Нийт үнэ"
+                  value={`${Number(totalPriceParam).toLocaleString()}₮`}
+                />
+              )}
+              <Info
+                label="Статус"
+                value={
+                  booking.status === "approved"
+                    ? "Баталгаажсан"
+                    : booking.status === "pending"
+                    ? "Хүлээгдэж байгаа"
+                    : booking.status === "cancelled"
+                    ? "Цуцлагдсан"
+                    : booking.status
+                }
+              />
+            </div>
+          ) : (
+            <p className="text-red-400 mb-6">Захиалгын мэдээлэл олдсонгүй.</p>
+          )}
+
+          <div className="flex gap-4 justify-center flex-wrap">
+            <button
+              onClick={() => (window.location.href = "/dashboard")}
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+            >
+              Dashboard руу очих
+            </button>
+            <button
+              onClick={() => window.history.back()}
+              className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-lg transition-colors"
+            >
+              Буцах
+            </button>
+          </div>
         </div>
       </div>
     );

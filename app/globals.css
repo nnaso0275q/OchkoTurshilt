@@ -196,3 +196,34 @@ input:-webkit-autofill:active {
     user-select: none;
   }
 }
+/* Custom animations and utilities for creative intro */
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #fff 0%, #6366f1 50%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.6;
+      transform: scale(1.1);
+    }
+  }
+}
+/* globals.css эсвэл component css */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* spinner-г арилгах */
+  background-color: red; /* хүссэн өнгө */
+}

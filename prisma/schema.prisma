@@ -18,6 +18,7 @@ model booking {
   starttime                    String?
   endtime                      String?
   status                       bookingstatus
+  PlusPrice                    Int?
   event_halls                  event_halls?  @relation(fields: [hallid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   hosts                        hosts?        @relation("booking_hostid", fields: [hostid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   performers                   performers?   @relation(fields: [performersid], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -45,8 +46,8 @@ model event_halls {
   location_link           String?
   duureg                  String?
   owner_id                Int?
-  owner                   mruser?   @relation(fields: [owner_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
   booking                 booking[]
+  owner                   mruser?   @relation(fields: [owner_id], references: [id], onUpdate: NoAction)
 }
 
 model hosts {
@@ -93,6 +94,7 @@ model mruser {
   createdat   DateTime?     @default(now()) @db.Timestamp(6)
   updatedate  DateTime?     @db.Timestamptz(6)
   phone       String?       @db.VarChar(20)
+  avatar      String?
   booking     booking[]
   event_halls event_halls[]
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
@@ -85,7 +86,7 @@ export default function PerformerCard({
           <Button
             onClick={() => onBook(performer.id)}
             disabled={isBooked || isBooking}
-            className={`flex-1 ${
+            className={`flex-1 text-white ${
               isBooked
                 ? "bg-gray-700 cursor-not-allowed opacity-50"
                 : "bg-blue-600 hover:bg-blue-700"

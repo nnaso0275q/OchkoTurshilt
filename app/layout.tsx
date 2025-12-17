@@ -9,7 +9,6 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/us/Header";
-import { LayoutFooter } from "@/components/us/LayoutFooter";
 import { Toaster } from "sonner";
 import SnowEffect from "@/components/effects/SnowEffect";
 

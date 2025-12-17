@@ -1,6 +1,6 @@
 "use client";
 import { use, useState } from "react";
-import { useSearchParams } from "next/navigation";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
@@ -115,13 +115,9 @@ const PerformersPage = ({
               setMaxPrice={setMaxPrice}
               isGenreOpen={isGenreOpen}
               setIsGenreOpen={setIsGenreOpen}
+              clearFilters={clearFilters}
+              isPopover={false}
             />
-            <button
-              onClick={clearFilters}
-              className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
-            >
-              Шүүлтүүр цэвэрлэх
-            </button>
           </div>
         </div>
         <div className="flex-1 w-full flex-row">
@@ -132,7 +128,7 @@ const PerformersPage = ({
             <div className=" sm:hidden items-center gap-3 md:hidden hidden lg:flex">
               <label className="text-sm text-gray-400">Эрэмбэлэх:</label>
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[200px] bg-neutral-800 text-white border-neutral-700">
+                <SelectTrigger className="w-50 bg-neutral-800 text-white border-neutral-700">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-neutral-800 text-white border-neutral-700">
@@ -171,6 +167,7 @@ const PerformersPage = ({
                     setMaxPrice={setMaxPrice}
                     isGenreOpen={isGenreOpen}
                     setIsGenreOpen={setIsGenreOpen}
+                    clearFilters={clearFilters}
                     isPopover={true}
                   />
                 </PopoverContent>

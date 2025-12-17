@@ -1,5 +1,3 @@
-// app/api/bookings/route.ts
-
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,8 +9,10 @@ export async function GET(req: NextRequest) {
     const date = searchParams.get("date");
     const status = searchParams.get("status");
 
-    // Query conditions
-    const filters: any = {};
+    // Query conditions - зөвхөн PlusPrice null байгаа booking-ууд
+    const filters: any = {
+      PlusPrice: null, // 🔥 зөвхөн null байгаа booking-ууд
+    };
 
     if (event_hall_id) filters.hallid = Number(event_hall_id);
     if (status) filters.status = status;
@@ -26,11 +26,12 @@ export async function GET(req: NextRequest) {
       orderBy: { id: "desc" },
     });
 
-    // Fetch all bookings with performer info for availability check
+    // Performers-ийн availability шалгахдаа мөн PlusPrice null
     const allBookings = await prisma.booking.findMany({
       where: {
         performersid: { not: null },
         status: { in: ["pending", "approved"] },
+        PlusPrice: null, // 🔥 зөвхөн null
       },
       select: {
         id: true,

@@ -12,8 +12,6 @@ import {
   LayoutDashboard,
   Music,
   Search,
-  Sparkles,
-  UserIcon,
   Users,
   X,
 } from "lucide-react";
@@ -28,7 +26,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import SearchFunction from "./Searchbar";
-import { Separator } from "../ui/separator";
+
 import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";

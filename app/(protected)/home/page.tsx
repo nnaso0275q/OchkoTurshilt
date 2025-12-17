@@ -6,6 +6,8 @@ import { Hero } from "@/components/us/Hero";
 import { WhyChooseUs } from "@/components/us/WhyChooseUs";
 import { LayoutFooter } from "@/components/us/LayoutFooter";
 import { useEffect, useRef, useState } from "react";
+import Loader from "@/app/LoadingAnimation";
+
 // remove <React.StrictMode> wrapper in development
 
 export default function Page() {
@@ -28,11 +30,7 @@ export default function Page() {
   }, []);
 
   if (loading) {
-    return (
-      <main className="h-screen flex items-center justify-center">
-        <div>Уншиж байна...</div>
-      </main>
-    );
+    return <Loader />;
   }
 
   return (

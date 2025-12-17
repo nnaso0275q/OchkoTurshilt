@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import BookingCalendar from "@/components/event-halls/DayCalendar";
+import { BookingCalendar } from "@/components/event-halls/DayCalendar";
 
 interface EventHall {
   id: number;

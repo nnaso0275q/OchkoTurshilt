@@ -92,7 +92,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Token буруу байна" }, { status: 401 });
     }
 
-    const { hallId, bookings } = await req.json();
+    const { hallId, bookings, status } = await req.json();
     if (!hallId || !bookings || !Array.isArray(bookings)) {
       return NextResponse.json(
         { error: "Танхим болон bookings array шаардлагатай" },
@@ -129,7 +129,7 @@ export async function POST(req: NextRequest) {
           date: new Date(date),
           starttime,
           endtime,
-          status: "approved",
+          status: (status as any) || "pending", // Use status from request, default to pending
         },
       });
 

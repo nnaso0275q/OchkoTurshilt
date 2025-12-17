@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
@@ -26,6 +27,7 @@ interface PerformerFiltersProps {
   setMaxPrice: (value: number) => void;
   isGenreOpen: boolean;
   setIsGenreOpen: (value: boolean) => void;
+  clearFilters: () => void;
 }
 
 export default function PerformerFilters({
@@ -42,6 +44,7 @@ export default function PerformerFilters({
   setMaxPrice,
   isGenreOpen,
   setIsGenreOpen,
+  clearFilters,
 }: PerformerFiltersProps) {
   return (
     <div>
@@ -123,7 +126,7 @@ export default function PerformerFilters({
             className="w-full"
           />
         </div>
-        <div className="text-sm text-gray-400 mt-3 flex justify-between px-2">
+        <div className="text-sm text-gray-400 mt-3 flex justify-between px-2 items-center">
           <span>Хамгийн бага: {minPopularity.toLocaleString()}</span>
           <span className="text-xs text-gray-500">Макс: 100,000</span>
         </div>
@@ -179,6 +182,12 @@ export default function PerformerFilters({
           </div>
         </div>
       </div>
+      <button
+        onClick={clearFilters}
+        className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg"
+      >
+        Шүүлтүүр цэвэрлэх
+      </button>
     </div>
   );
 }

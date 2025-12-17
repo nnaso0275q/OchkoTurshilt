@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -71,13 +72,11 @@ export default function HostProfilePage() {
       });
   }, [id]);
 
-  if (!host) return <div className="text-white p-10">Loading...</div>;
+  if (!host) return <div className="text-white p-10">уншиж байна...</div>;
 
   return (
     <div>
-      <Header />
-
-      <div className="min-h-screen bg-[#0B0B0E] relative overflow-hidden px-10 pt-[100px]">
+      <div className="min-h-screen bg-black relative overflow-hidden px-10 pt-25">
         {/* Background Effects */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(20,20,30,0.4),transparent_50%)] pointer-events-none" />
         <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3...')]"></div>
@@ -97,7 +96,7 @@ export default function HostProfilePage() {
                   </div>
 
                   <div
-                    className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-linear-to-r from-blue-600 to-purple-600 
+                    className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-linear-to-r from-blue-600 to-blue-700 
                                   text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg"
                   >
                     {host.status}
@@ -125,7 +124,7 @@ export default function HostProfilePage() {
                     <div className="text-sm text-white/50 mb-1">
                       Үнийн хүрээ
                     </div>
-                    <div className="text-2xl font-bold bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    <div className="text-2xl font-bold bg-linear-to-r from-blue-400 to-blue-500 bg-clip-text text-transparent">
                       {host.price
                         ? host.price.toLocaleString() + "₮"
                         : "Тохиролцоно"}
@@ -134,8 +133,8 @@ export default function HostProfilePage() {
                 </div>
 
                 <button
-                  className="w-full mt-8 h-14 rounded-xl bg-linear-to-r from-blue-600 to-purple-600 
-                                   hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-lg 
+                  className="w-full mt-8 h-14 rounded-xl bg-linear-to-r from-blue-600 to-blue-700 
+                                   hover:from-blue-500 hover:to-blue-600 text-white font-semibold text-lg 
                                    shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] 
                                    transition-all duration-300"
                 >
@@ -151,7 +150,7 @@ export default function HostProfilePage() {
                     </span>
                   </div>
                   <div className="bg-[#1F222A] rounded-xl px-4 py-3 border border-white/5 flex items-center gap-3">
-                    <Phone className="w-4 h-4 text-purple-400" />
+                    <Phone className="w-4 h-4 text-blue-400" />
                     <span className="text-sm text-white/80">
                       {host.phone || "Утас байхгүй"}
                     </span>
@@ -176,7 +175,7 @@ export default function HostProfilePage() {
               {/* EXPERIENCE */}
               <div className="bg-[rgba(20,22,27,0.6)] backdrop-blur-xl rounded-3xl border border-white/10 p-8 shadow-xl">
                 <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                  <Calendar className="w-6 h-6 text-purple-400" />
+                  <Calendar className="w-6 h-6 text-blue-400" />
                   Туршлага
                 </h2>
                 <p className="text-white/70 leading-relaxed text-lg">
@@ -226,13 +225,13 @@ export default function HostProfilePage() {
                         </h3>
                         <p className="text-white/60 text-sm">{item.title}</p>
 
-                        <div className="mt-2 text-blue-400 text-sm">
+                        <div className="mt-2 text-white text-sm">
                           ⭐ {item.rating} / 5.0
                         </div>
 
                         <a
                           href={`/host/${item.id}`}
-                          className="block mt-3 text-center bg-linear-to-r from-blue-600 to-purple-600  rounded-lg py-2 text-white hover:bg-blue-700 transition"
+                          className="block mt-3 text-center bg-linear-to-r from-blue-600 to-blue-700  rounded-lg py-2 text-white hover:bg-blue-700 transition"
                         >
                           Профайл
                         </a>

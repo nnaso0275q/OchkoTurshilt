@@ -9,7 +9,6 @@ import {
   DollarSign,
   Users,
   TrendingUp,
-  Edit,
   Eye,
   MapPin,
   Star,
@@ -30,31 +29,38 @@ export default function HallOwnerDashboard() {
 
   // Check if user is hall owner
   useEffect(() => {
+    console.log("🟢 Dashboard mounted");
     const checkHallOwner = async () => {
       const token = localStorage.getItem("token");
-
+      console.log("🟢 Token exists:", !!token);
       if (!token) {
+        console.log("🔴 No token - redirecting to home");
         router.push("/home");
         return;
       }
 
       try {
+        console.log("🟢 Checking auth...");
         const res = await fetch("/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
+        console.log("🟢 Auth response:", res.status);
         if (!res.ok) {
+          console.log("🔴 Auth failed - redirecting to home");
           router.push("/home");
           return;
         }
 
         const data = await res.json();
-
+        console.log("🟢 User data:", data.user);
         if (data.user.role !== "hallowner") {
+          console.log("🔴 Not hallowner - redirecting to home");
           router.push("/home");
           return;
         }
 
+        console.log("🟢 User is hallowner, fetching halls...");
         setUserInfo(data.user);
         setIsHallOwner(true);
         fetchMyHalls(token);
@@ -69,19 +75,18 @@ export default function HallOwnerDashboard() {
 
   const fetchMyHalls = async (token: string) => {
     try {
-      const res = await fetch("/api/hallowner/my-halls", {
+      console.log("🔵 Fetching halls...");
+      const res = await fetch("/api/my-halls", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      console.log("🔵 Response status:", res.status);
       if (res.ok) {
         const data = await res.json();
+        console.log("🔵 Halls data:", data);
+        console.log("🔵 Number of halls:", data.halls?.length);
 
-        // Redirect to edit page of first hall if they have any halls
-        if (data.halls && data.halls.length > 0) {
-          router.push(`/hallowner-dashboard/edit/${data.halls[0].id}`);
-          return;
-        }
-
+        console.log("🔴 No halls found - staying on dashboard");
         setHalls(data.halls || []);
 
         // Calculate stats
@@ -286,18 +291,12 @@ export default function HallOwnerDashboard() {
                     <div className="flex gap-2">
                       <button
                         onClick={() =>
-                          router.push(`/hallowner-dashboard/edit/${hall.id}`)
+                          router.push(`/hallowner-eventhall-edit/${hall.id}`)
                         }
                         className="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
                       >
-                        <Edit className="w-4 h-4" />
-                        Засах
-                      </button>
-                      <button
-                        onClick={() => router.push(`/event-halls/${hall.id}`)}
-                        className="bg-neutral-700 hover:bg-neutral-600 px-4 py-2 rounded-lg transition-colors"
-                      >
                         <Eye className="w-4 h-4" />
+                        Харах
                       </button>
                     </div>
                   </div>

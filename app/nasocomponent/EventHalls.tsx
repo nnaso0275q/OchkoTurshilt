@@ -20,12 +20,11 @@ import {
   SelectItem,
   SelectValue,
   SelectGroup,
-  SelectLabel,
 } from "@/components/ui/select";
 import EventHallsPage from "./EventHallFilter";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
+
 import OrderEventHall from "./OrderEventHall";
 
 export default function EventHalls() {

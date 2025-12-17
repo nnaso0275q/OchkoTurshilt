@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import BookingsList from "./BookingsList";
 import PerformerFilters from "./PerformerFilters";
@@ -22,6 +23,7 @@ interface FilterSidebarProps {
   isGenreOpen: boolean;
   setIsGenreOpen: (value: boolean) => void;
   isPopover?: boolean;
+  clearFilters: () => void;
 }
 
 export default function FilterSidebar({
@@ -43,6 +45,7 @@ export default function FilterSidebar({
   setMaxPrice,
   isGenreOpen,
   setIsGenreOpen,
+  clearFilters,
   isPopover = false,
 }: FilterSidebarProps) {
   return (
@@ -64,6 +67,7 @@ export default function FilterSidebar({
       />
 
       <PerformerFilters
+        clearFilters={clearFilters}
         genres={genres}
         selectedGenres={selectedGenres}
         setSelectedGenres={setSelectedGenres}
