@@ -260,15 +260,15 @@ export default function AdminDataManagement() {
     { id: "requests" as Tab, label: "Хүсэлтүүд", icon: FileText },
     { id: "users" as Tab, label: "Хэрэглэгчид", icon: Users },
     { id: "bookings" as Tab, label: "Захиалгууд", icon: Calendar },
-    { id: "event-halls" as Tab, label: "Үйл явдлын танхим", icon: Building2 },
+    { id: "event-halls" as Tab, label: "Танхимууд", icon: Building2 },
     { id: "performers" as Tab, label: "Уран бүтээлчид", icon: Music },
     { id: "hosts" as Tab, label: "Хөтлөгч", icon: UserCircle },
   ];
 
   return (
-    <div className="bg-black min-h-screen text-white">
+    <div className="bg-black min-h-screen text-white mt-30">
       <main className="container mx-auto p-4 md:p-8">
-        <h1 className="text-4xl font-bold mb-8 bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-8 bg-linear-to-r  from-blue-400 to-purple-500 bg-clip-text text-transparent">
           Админ удирдлагын самбар
         </h1>
 

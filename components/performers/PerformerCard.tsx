@@ -25,7 +25,10 @@ export default function PerformerCard({
   const router = useRouter();
 
   return (
-    <div className="bg-neutral-900 rounded-lg overflow-hidden hover:scale-[1.02] transition">
+    <div
+      onClick={() => router.push(`/performers/${performer.id}`)}
+      className="bg-neutral-900 cursor-pointer rounded-lg overflow-hidden hover:scale-[1.02] transition"
+    >
       <div className="relative h-90 bg-neutral-800">
         {performer.image ? (
           <Image
@@ -78,7 +81,7 @@ export default function PerformerCard({
         <div className="flex gap-2">
           <button
             onClick={() => router.push(`/performers/${performer.id}`)}
-            className="flex-1 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-lg transition text-sm"
+            className="flex-1 cursor-pointer px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-lg transition text-sm"
           >
             Дэлгэрэнгүй
           </button>
@@ -86,7 +89,7 @@ export default function PerformerCard({
           <Button
             onClick={() => onBook(performer.id)}
             disabled={isBooked || isBooking}
-            className={`flex-1 text-white ${
+            className={`flex-1 cursor-pointer text-white ${
               isBooked
                 ? "bg-gray-700 cursor-not-allowed opacity-50"
                 : "bg-blue-600 hover:bg-blue-700"

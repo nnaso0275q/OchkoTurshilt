@@ -2,6 +2,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 type HostType = {
@@ -73,9 +74,13 @@ export default function HostCard({ host, selectedBooking }: HostCardProps) {
         return "bg-amber-500/10 text-amber-400 border-amber-500/20";
     }
   };
+  const router = useRouter();
 
   return (
-    <div className="bg-zinc-900 p-5 sm:p-6 rounded-2xl border border-zinc-800 text-white hover:border-zinc-700 transition-all duration-300 flex flex-col">
+    <div
+      onClick={() => router.push(`/host/${host.id}`)}
+      className="bg-zinc-900 cursor-pointer p-5 sm:p-6 rounded-2xl border border-zinc-800 text-white hover:border-zinc-700 transition-all duration-300 flex flex-col"
+    >
       {/* Profile Image */}
       <img
         src={host.image || "/placeholder.svg"}
@@ -133,7 +138,7 @@ export default function HostCard({ host, selectedBooking }: HostCardProps) {
           <button
             disabled={isBooked}
             onClick={() => !isBooked && handleBooking(host.id, selectedBooking)}
-            className={`w-full py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+            className={`w-full py-2.5  cursor-pointer rounded-xl text-sm font-medium transition-all duration-200 ${
               isBooked
                 ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-500 text-white"

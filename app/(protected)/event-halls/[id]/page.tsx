@@ -4,7 +4,7 @@ import type React from "react";
 import Image from "next/image";
 
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   MapPin,
   Phone,
@@ -15,6 +15,7 @@ import {
   Check,
   Star,
   ArrowUpRight,
+  Router,
 } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -45,6 +46,7 @@ export default function SelectedEventHall() {
   const [eventHallData, setEventHallData] = useState<EventHall | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   const getSelectedEventHall = useCallback(async () => {
     if (!eventHallId) return;
@@ -127,7 +129,12 @@ export default function SelectedEventHall() {
           alt={eventHallData.name}
           className="h-full w-full object-cover transition-all duration-500"
         />
-
+        <div
+          onClick={() => router.push("/home/event-halls")}
+          className="text-4xl"
+        >
+          Butsah
+        </div>
         {/* Clean gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-background/20" />
 
@@ -162,7 +169,7 @@ export default function SelectedEventHall() {
 
         {/* Minimal navigation controls */}
         {eventHallData.images.length > 1 && (
-          <>
+          <div>
             <button
               onClick={prevImage}
               className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-background/60 backdrop-blur-sm flex items-center justify-center hover:bg-background/80 transition-colors"
@@ -175,7 +182,7 @@ export default function SelectedEventHall() {
             >
               <ChevronRight className="h-5 w-5" />
             </button>
-          </>
+          </div>
         )}
 
         {/* Image counter */}

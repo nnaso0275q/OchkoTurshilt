@@ -176,11 +176,11 @@ export default function EventHalls() {
               selected={date}
               onSelect={setDate}
               disabled={{ before: new Date() }}
-              className="rounded-md shadow-sm w-80 bg-neutral-900 text-gray-200"
+              className="cursor-pointer rounded-md shadow-sm w-80 bg-neutral-900 text-gray-200"
             />
 
             <Select value={timeFilter} onValueChange={setTimeFilter}>
-              <SelectTrigger className="w-full mt-4 bg-neutral-900 text-white border-neutral-700">
+              <SelectTrigger className=" cursor-pointer w-full mt-4 bg-neutral-900 text-white border-neutral-700">
                 <SelectValue placeholder="Цагийн нарийвчлал" />
               </SelectTrigger>
               <SelectContent className="w-80">
@@ -204,10 +204,10 @@ export default function EventHalls() {
         <div className="flex-1">
           <div className="flex justify-between items-center">
             <h1 className="text-4xl font-bold mb-0 md:mb-4 md:flex hidden">
-              Эвэнт халл хайх
+              Эвэнт халлc
             </h1>
 
-            <div className=" items-center gap-3 md:flex hidden">
+            <div className=" cursor-pointer items-center gap-3 md:flex hidden">
               <label className="text-sm text-gray-400">
                 Үнээр нь эрэмбэлэх:
               </label>
@@ -245,7 +245,8 @@ export default function EventHalls() {
               filteredHalls?.map((hall) => (
                 <div
                   key={hall.id}
-                  className="bg-neutral-900 rounded-lg overflow-hidden hover:scale-[1.02] transition-transform duration-200 flex flex-col"
+                  onClick={() => router.push(`/event-halls/${hall.id}`)}
+                  className="bg-neutral-900 cursor-pointer rounded-lg overflow-hidden hover:scale-[1.02] transition-transform duration-200 flex flex-col"
                 >
                   <div className="relative h-60 bg-neutral-800">
                     <ImageWithFallback
@@ -281,7 +282,7 @@ export default function EventHalls() {
 
                     <Button
                       onClick={() => router.push(`/event-halls/${hall.id}`)}
-                      className="mt-auto w-full bg-neutral-800 hover:bg-neutral-700 text-white py-2 rounded-lg"
+                      className=" cursor-pointer mt-auto w-full bg-neutral-800 hover:bg-neutral-700 text-white py-2 rounded-lg"
                     >
                       Дэлгэрэнгүй
                     </Button>

@@ -88,7 +88,7 @@ const BookingResponsePage = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto mt-[70px] p-6 bg-gray-800 text-white rounded-xl shadow-lg">
+    <div className="max-w-xl mx-auto mt-17.5 p-6 bg-gray-800 text-white rounded-xl shadow-lg">
       <h1 className="text-2xl font-bold mb-4">Захиалгын мэдээлэл</h1>
       <div
         className={`p-4 rounded-lg ${

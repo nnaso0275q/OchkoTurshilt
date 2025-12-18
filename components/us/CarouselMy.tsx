@@ -32,7 +32,7 @@ export const CarouselMy = ({ halls }: { halls?: HallType[] }) => {
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
 
-  const plugin = React.useRef(Autoplay({ delay: 2000 }));
+  const plugin = React.useRef(Autoplay({ delay: 4500 }));
 
   React.useEffect(() => {
     if (!api) return;

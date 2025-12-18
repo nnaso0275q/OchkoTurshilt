@@ -39,7 +39,7 @@ export const Hero = () => {
           Онцлох Танхим
         </h2>
         <p
-          className="max-w-3xl mx-auto text-lg text-blue-600 animate-fade-in-up"
+          className="max-w-3xl mx-auto text-lg text-blue-400 animate-fade-in-up"
           style={{ animationDelay: "400ms" }}
         >
           Таны арга хэмжээнд тохирох тансаг, өргөн болон тухтай заалуудыг эндээс
