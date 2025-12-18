@@ -117,7 +117,7 @@ function Calendar({
         range_middle: cn("rounded-none", defaultClassNames.range_middle),
         range_end: cn("rounded-r-md bg-accent", defaultClassNames.range_end),
         today: cn(
-          "bg-accent text-accent-foreground rounded-md data-[selected=true]:rounded-none",
+          "bg-accent text-accent-foreground rounded-md data-[selected=true]:rounded-md",
           defaultClassNames.today
         ),
         outside: cn(
@@ -208,7 +208,7 @@ function CalendarDayButton({
       data-selected-single={isSelectedSingle} // зөвхөн энэ өдөр
       className={cn(
         // Сонгогдсон өдөр зөвхөн blue background, бусад өдөр neutral
-        "flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal",
+        "flex aspect-square rounded-md size-auto w-full  flex-col gap-1 leading-none font-normal",
         isSelectedSingle
           ? "bg-blue-500 text-white"
           : "bg-neutral-900 text-gray-200 hover:bg-neutral-800",

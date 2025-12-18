@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import HallCarousel from "./Hallcarousel";
+import Loader from "@/app/LoadingAnimation";
 
 // FETCHER
 
@@ -52,8 +53,9 @@ export default function Dashboard() {
     error,
   } = useSWR("/api/dashboard-backend", fetcher);
 
-  if (isLoading)
-    return <p className="text-white text-4xl">Ачааллаж байна...</p>;
+  if (isLoading) {
+    return <Loader />;
+  }
 
   if (error) {
     console.error("Dashboard error:", error);
@@ -69,10 +71,7 @@ export default function Dashboard() {
 
   if (!bookings || bookings.length === 0)
     return (
-      <div className="p-10">
-        <h1 className="text-3xl font-bold text-white mb-4">
-          Таны захиалсан Event Hall
-        </h1>
+      <div className="mt-50">
         <p className="text-white/70 text-xl">
           Танд одоогоор идэвхтэй захиалга алга байна.
         </p>
@@ -101,6 +100,7 @@ export default function Dashboard() {
 
   // UI START (EVENTLUX HIGH-END DASHBOARD)
 
+  console.log({ grouped });
   return (
     <div className="min-h-screen bg-[#0A0A0F]">
       {/* CONTENT */}
@@ -116,18 +116,15 @@ export default function Dashboard() {
             },
             {
               title: "Хүлээгдэж буй хүсэлт",
-              value: Object.values(grouped).filter(
-                (item: any) => item.hallBooking?.status === "pending"
-              ).length,
+              value: bookings.filter((b: any) => b.status === "pending").length,
 
               sub: "Дуучид болон Хөтлөгчид",
               color: "from-purple-500/20 to-purple-600/20",
             },
             {
-              title: "Баталгаажсан захиалга",
-              value: Object.values(grouped).filter(
-                (item: any) => item.hallBooking?.status === "approved"
-              ).length,
+              title: "Баталгаажсан уран бүтээлчид",
+              value: bookings.filter((b: any) => b.status === "approved")
+                .length,
 
               sub: "Бэлэн",
               color: "from-green-500/20 to-green-600/20",
@@ -150,13 +147,13 @@ export default function Dashboard() {
         </h2>
 
         {/* Search */}
-        <div className="relative hidden md:block mb-6">
+        {/* <div className="relative hidden md:block mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
           <Input
             placeholder="Арга хэмжээ, дуучид хайх..."
             className="w-72 rounded-2xl border-white/10 bg-white/5 pl-10 text-white placeholder:text-white/40 focus:shadow-[0_0_20px_rgba(76,139,255,0.3)]"
           />
-        </div>
+        </div> */}
         <div className="space-y-6">
           {Object.entries(grouped).map(([key, group]: any) => {
             const hallBooking = group.hallBooking;

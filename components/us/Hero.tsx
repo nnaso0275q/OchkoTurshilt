@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Users, DollarSign, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
+import ImageWithFallback from "./Fallback";
 
 export const Hero = () => {
   const [originalHalls, setOriginalHalls] = useState<any[]>([]);
@@ -58,15 +59,10 @@ export const Hero = () => {
               onClick={() => router.push(`/event-halls/${hall.id}`)}
             >
               <div className="relative h-48 w-full">
-                <Image
-                  src={
-                    hall.images?.[0] ||
-                    "https://via.placeholder.com/400x300?text=No+Image"
-                  }
+                <ImageWithFallback
+                  src={hall.images?.[0] || "/eventhalldefault.jpg"}
+                  fallbackSrc="/eventhalldefault.jpg"
                   alt={hall.name}
-                  fill={true}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover opacity-80"
                 />
               </div>
 

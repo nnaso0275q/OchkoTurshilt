@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 
 import OrderEventHall from "./OrderEventHall";
+import ImageWithFallback from "@/components/us/Fallback";
 
 export default function EventHalls() {
   const [originalHalls, setOriginalHalls] = useState<any[]>([]);
@@ -245,14 +246,10 @@ export default function EventHalls() {
                   className="bg-neutral-900 rounded-lg overflow-hidden hover:scale-[1.02] transition-transform duration-200 flex flex-col"
                 >
                   <div className="relative h-60 bg-neutral-800">
-                    <Image
-                      src={
-                        hall.images[0] ||
-                        "https://img.freepik.com/premium-vector/image-icon-design-vector-template_1309674-943.jpg"
-                      }
+                    <ImageWithFallback
+                      src={hall.images?.[0] || "/eventhalldefault.jpg"}
+                      fallbackSrc="/eventhalldefault.jpg"
                       alt={hall.name}
-                      fill
-                      className="object-cover"
                     />
                   </div>
 

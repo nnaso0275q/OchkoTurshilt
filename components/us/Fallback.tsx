@@ -1,24 +1,32 @@
+"use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 
-const ImageWithFallback = ({
-  src,
-  fallbackSrc,
-  alt,
-  ...rest
-}: {
+interface Props {
   src: string;
   fallbackSrc: string;
   alt: string;
-}) => {
+}
+
+const ImageWithFallback = ({ src, fallbackSrc, alt, ...rest }: Props) => {
   const [imgSrc, setImgSrc] = useState(src);
 
-  const handleError = () => {
-    setImgSrc(fallbackSrc);
-  };
-
   return (
-    <Image src={imgSrc} alt={alt} fill={true} onError={handleError} {...rest} />
+    <Image
+      key={imgSrc} // ⭐ маш чухал
+      src={imgSrc}
+      alt={alt}
+      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      className="object-cover opacity-80"
+      fill
+      onError={() => {
+        if (imgSrc !== fallbackSrc) {
+          setImgSrc(fallbackSrc);
+        }
+      }}
+      {...rest}
+    />
   );
 };
 

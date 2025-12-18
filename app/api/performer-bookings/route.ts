@@ -25,6 +25,7 @@ export async function POST(req: NextRequest) {
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
     const userId = decoded.id;
+    console.log({ userId });
 
     // ---- Хэрэглэгчийн мэдээлэл авах ----
     const user = await prisma.mruser.findUnique({
@@ -61,10 +62,12 @@ export async function POST(req: NextRequest) {
     }
 
     // ---- hallId-тэй performerId нь null booking байгаа эсэхийг шалгах ----
+    // ---- hallId-тэй performerId нь null booking (ЗӨВХӨН тухайн хэрэглэгчийнх) ----
     let booking = await prisma.booking.findFirst({
       where: {
         hallid: hallId,
         performersid: null,
+        userid: userId, // ⭐ ЭНД нэмнэ
       },
       include: {
         performers: true,
@@ -78,6 +81,7 @@ export async function POST(req: NextRequest) {
       booking = await prisma.booking.update({
         where: { id: booking.id },
         data: {
+          userid: userId, // ⭐ ЭНЭ ЧУХАЛ
           performersid: performerId,
           starttime,
           status: "pending",
@@ -142,6 +146,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    console.log({ booking });
     return NextResponse.json({
       success: true,
       message: "Уран бүтээлч амжилттай захиалагдлаа!",
