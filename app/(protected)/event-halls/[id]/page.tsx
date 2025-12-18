@@ -379,7 +379,10 @@ function InfoCard({
         )}
       </p>
       {label === "Утас" && (
-        <span className="bg-transparent text-transparent">aaaaaaa</span>
+        <div className="mt-6">
+          {" "}
+          <span className="bg-transparent text-transparent">aaaaaaa</span>
+        </div>
       )}
     </div>
   );

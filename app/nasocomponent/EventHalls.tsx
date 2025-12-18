@@ -208,7 +208,9 @@ export default function EventHalls() {
             </h1>
 
             <div className=" items-center gap-3 md:flex hidden">
-              <label className="text-sm text-gray-400">Эрэмбэлэх:</label>
+              <label className="text-sm text-gray-400">
+                Үнээр нь эрэмбэлэх:
+              </label>
               <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="filter-input w-52 bg-neutral-900">
                   <SelectValue placeholder="Багаас их" />
