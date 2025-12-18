@@ -288,14 +288,14 @@ export default function SelectedEventHall() {
 
               {eventHallData.advantages.length > 0 && (
                 <div className="mt-8">
-                  <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
+                  <h4 className="text-sm font-medium text-white uppercase tracking-wide mb-4">
                     Давуу талууд
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {eventHallData.advantages.map((adv, i) => (
                       <span
                         key={i}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary text-sm"
+                        className="inline-flex items-center text-muted-foreground gap-1.5 px-3 py-1.5 rounded-full bg-secondary text-sm"
                       >
                         <Check className="w-3.5 h-3.5" />
                         {adv}
@@ -316,7 +316,7 @@ export default function SelectedEventHall() {
                   {eventHallData.suitable_events.map((event, i) => (
                     <span
                       key={i}
-                      className="px-4 py-2 rounded-full border border-border text-sm"
+                      className="px-4 py-2 text-muted-foreground rounded-full border border-border text-sm"
                     >
                       {event}
                     </span>
@@ -374,11 +374,11 @@ function InfoCard({
     <div className="p-4 rounded-xl bg-card border border-border hover:border-foreground/20 transition-colors group">
       <div className="flex items-center gap-2 mb-2 text-muted-foreground">
         {icon}
-        <span className="text-xs font-medium uppercase tracking-wide">
+        <span className="text-xs text-white font-medium uppercase tracking-wide">
           {label}
         </span>
       </div>
-      <p className="font-medium flex items-center gap-1.5">
+      <p className="font-medium text-muted-foreground flex items-center gap-1.5">
         {value}
 
         {link && (

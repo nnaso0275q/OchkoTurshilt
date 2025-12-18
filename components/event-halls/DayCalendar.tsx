@@ -509,7 +509,7 @@ export function BookingCalendar({
         {displayPrice > 0 && (
           <span
             className={`text-[9px] ${
-              showGreen ? "text-emerald-400" : "text-blue-400"
+              showGreen ? "text-emerald-400" : "text-blue-800"
             }`}
           >
             {displayPrice.toLocaleString()}₮
@@ -710,7 +710,7 @@ export function BookingCalendar({
                   return (
                     <div
                       key={`${i}-${j}`}
-                      className="min-h-[90px] sm:min-h-[100px] bg-neutral-950 rounded-lg p-1.5 text-neutral-700 text-xs"
+                      className="min-h-22.5 sm:min-h-25 bg-neutral-950 rounded-lg p-1.5 text-neutral-700 text-xs"
                     >
                       <div className="font-medium">{day}</div>
                     </div>
@@ -719,7 +719,7 @@ export function BookingCalendar({
                 return (
                   <div
                     key={`${i}-${j}`}
-                    className={`min-h-[90px] sm:min-h-[100px] border rounded-lg p-1.5 flex flex-col gap-1 transition-colors ${
+                    className={`min-h-22.5 sm:min-h-25 border rounded-lg p-1.5 flex flex-col gap-1 transition-colors ${
                       new Date(
                         `${currentYear}-${currentMonth + 1}-${day}`
                       ).getTime() < new Date(todayStr).getTime()

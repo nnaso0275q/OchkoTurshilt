@@ -30,6 +30,7 @@ import SearchFunction from "./Searchbar";
 import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import Link from "next/link";
 
 export const Header = () => {
   const [isPhoneSearchOpen, setIsPhoneSearchOpen] = useState(false);
@@ -84,10 +85,12 @@ export const Header = () => {
   return (
     <>
       {/* DESKTOP HEADER */}
-      <div className="hidden lg:flex text-white w-full h-20 items-center justify-between bg-black/50 backdrop-blur-sm px-10">
-        <div className="flex-1 flex justify-start">
-          <Logo />
-          <div className=" ml-3 flex items-center justify-between font-bold 2xl:hidden">
+      <div className="hidden lg:flex text-white  w-full h-20 items-center justify-between bg-black/50 backdrop-blur-sm px-10">
+        <div className="flex-1 flex justify-start ">
+          <Link href={"/home"}>
+            <Logo />
+          </Link>
+          <div className=" ml-3 flex  items-center justify-between font-bold 2xl:hidden">
             <ButtonOfNav href="/home" text="Нүүр" />
             <ButtonOfNav href="/event-halls" text="Танхим" />
             <ButtonOfNav href="/performers" text="Дуучин" />
@@ -102,7 +105,7 @@ export const Header = () => {
           </div>
         </div>
 
-        <div className="items-center gap-10 font-bold hidden 2xl:flex">
+        <div className="items-center gap-10 font-bold  hidden 2xl:flex">
           <ButtonOfNav href="/home" text="Нүүр" />
           <ButtonOfNav href="/event-halls" text="Танхим" />
           <ButtonOfNav href="/performers" text="Дуучин" />
@@ -126,14 +129,14 @@ export const Header = () => {
               {isLoggedIn ? (
                 <Popover>
                   <PopoverTrigger asChild>
-                    <button className="flex ml-4 items-center gap-2 rounded-3xl border bg-neutral-900 border-white/10 p-1.5 pr-3 transition-all hover:border-blue-500/30 hover:bg-neutral-800">
+                    <button className="flex cursor-pointer ml-4 items-center gap-2 rounded-3xl border bg-neutral-900 border-white/10 p-1.5 pr-3 transition-all hover:border-blue-500/30 hover:bg-neutral-800">
                       <Avatar className="h-7 w-7">
                         <AvatarImage src="/professional-mongolian-male-host.jpg" />
                         <AvatarFallback>
                           {user?.name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
-                      <ChevronDown className="h-4 w-4 text-white/60" />
+                      <ChevronDown className="h-4 w-4 text-white/60 cursor-pointer" />
                     </button>
                   </PopoverTrigger>
                   <PopoverContent

@@ -54,7 +54,7 @@ export const Hero = () => {
           {originalHalls.slice(0, 6).map((hall, index) => (
             <div
               key={hall.id}
-              className="bg-neutral-900 rounded-lg overflow-hidden transform hover:shadow-xl hover:scale-[1.02] transition-transform duration-200"
+              className="bg-neutral-900 cursor-pointer rounded-lg overflow-hidden transform hover:shadow-xl hover:scale-[1.02] transition-transform duration-200"
               style={{ animationDelay: `${600 + index * 100}ms` }}
               onClick={() => router.push(`/event-halls/${hall.id}`)}
             >

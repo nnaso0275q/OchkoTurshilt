@@ -92,7 +92,7 @@ const CarouselCard = ({
 }) => {
   const router = useRouter();
   return (
-    <CarouselItem className="relative w-full h-[60vh] sm:h-screen p-0">
+    <CarouselItem className="relative w-full h-[60vh] sm:h-screen p-0 cursor-pointer">
       <Card className="w-full h-full p-0 border-0 ml-[16] shadow-none rounded-none relative">
         {/* <Image
           src={
