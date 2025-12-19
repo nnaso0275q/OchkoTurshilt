@@ -88,15 +88,15 @@ export const WhyChooseUs = () => {
 
       {/* Background Music */}
       <audio ref={audioRef} loop playsInline>
-        <source src="/song.mp3" type="audio/mpeg" />
+        {/* <source src="/song.mp3" type="audio/mpeg" /> */}
       </audio>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12 lg:mb-16">
-          <h2 className="font-extrabold text-4xl lg:text-5xl mb-4 md:mt-0 mt-3">
+          <h2 className="font-extrabold text-3xl lg:text-5xl mb-4 md:mt-0 mt-3">
             Яагаад биднийг сонгох естой вэ?
           </h2>
-          <p className="max-w-2xl mx-auto text-lg text-neutral-400">
+          <p className="max-w-2xl mx-auto text-[14px] lg:text-lg text-neutral-400">
             Бид таны арга хэмжээг төлөвлөх процессыг хялбар, онцгой болгох
             бүхнийг нэг дороос шийдэж өгдөг.
           </p>

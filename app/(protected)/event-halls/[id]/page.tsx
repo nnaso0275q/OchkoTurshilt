@@ -20,6 +20,8 @@ import {
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookingCalendar } from "@/components/event-halls/DayCalendar";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface EventHall {
   id: number;
@@ -130,17 +132,14 @@ export default function SelectedEventHall() {
           alt={eventHallData.name}
           className="h-full w-full object-cover transition-all duration-500"
         />
-        <div
-          onClick={() => router.push("/home/event-halls")}
-          className="text-4xl"
-        >
-          Butsah
-        </div>
+        <Link href="/event-halls">
+          <Button className="text-4xl fixed">Butsah</Button>
+        </Link>
         {/* Clean gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-background/20" />
 
         {/* Hero Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+        <div className="sticky bottom-0 left-0 right-0 p-8 md:p-12">
           <div className="max-w-400 mx-auto">
             <div className="flex items-center gap-2 mb-3">
               {eventHallData.rating && (

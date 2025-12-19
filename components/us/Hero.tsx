@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Users, DollarSign, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import ImageWithFallback from "./Fallback";
+import { Button } from "../ui/button";
 
 export const Hero = () => {
   const [originalHalls, setOriginalHalls] = useState<any[]>([]);
@@ -49,8 +50,8 @@ export const Hero = () => {
       </div>
 
       {/* Featured Cards Grid */}
-      <div className="container mx-auto px-4 mt-12 lg:mt-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
+      <div className="container mx-auto hidden md:flex px-4 mt-12 lg:mt-20">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
           {originalHalls.slice(0, 6).map((hall, index) => (
             <div
               key={hall.id}
@@ -94,6 +95,41 @@ export const Hero = () => {
                     <span>{hall.rating}</span>
                   </div>
                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="container md:hidden flex mx-auto px-4 mt-12 lg:mt-20">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
+          {originalHalls.slice(0, 4).map((hall, index) => (
+            <div
+              key={hall.id}
+              className="bg-neutral-900 h-full flex flex-col cursor-pointer rounded-lg overflow-hidden transform hover:shadow-xl justify-between hover:scale-[1.02] transition-transform duration-200"
+              style={{ animationDelay: `${600 + index * 100}ms` }}
+              onClick={() => router.push(`/event-halls/${hall.id}`)}
+            >
+              <div className="relative h-40 w-full">
+                <ImageWithFallback
+                  src={hall.images?.[0] || "/eventhalldefault.jpg"}
+                  fallbackSrc="/eventhalldefault.jpg"
+                  alt={hall.name}
+                />
+              </div>
+
+              <div className="p-3">
+                <h3 className="text-l font-bold text-white">{hall.name}</h3>
+                <p className="text-[14px] text-neutral-400 mt-1 truncate">
+                  {hall.location}
+                </p>
+              </div>
+              <div className="p-2  flex justify-end mt-auto">
+                <Button
+                  onClick={() => router.push(`/event-halls/${hall.id}`)}
+                  className=" cursor-pointer mt-auto w-full bg-neutral-800 hover:bg-neutral-700 text-white py-2 rounded-lg"
+                >
+                  Дэлгэрэнгүй
+                </Button>
               </div>
             </div>
           ))}

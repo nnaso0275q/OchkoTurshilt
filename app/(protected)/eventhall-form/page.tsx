@@ -1,10 +1,9 @@
-import React from "react";
-import EventHallForm from "./Form";
+import Form from "./Form";
 
 const ContactPage = () => {
   return (
     <div>
-      <EventHallForm></EventHallForm>
+      <Form />
     </div>
   );
 };

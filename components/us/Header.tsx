@@ -123,13 +123,14 @@ export const Header = () => {
           <div className="flex items-center max-w-200">
             <Search className="mr-[-36] w-5 z-10 text-neutral-500" />
             <SearchFunction styleDesktop={styleDesktop} />
+            {/* Button placed to the right of the search - navigates to event halls (placeholder for filters) */}
           </div>
           {hasMounted && (
             <>
               {isLoggedIn ? (
                 <Popover>
                   <PopoverTrigger asChild>
-                    <button className="flex cursor-pointer ml-4 items-center gap-2 rounded-3xl border bg-neutral-900 border-white/10 p-1.5 pr-3 transition-all hover:border-blue-500/30 hover:bg-neutral-800">
+                    <button className="flex cursor-pointer ml-2 items-center gap-2 rounded-3xl border bg-neutral-900 border-white/10 p-1.5 pr-3 transition-all hover:border-blue-500/30 hover:bg-neutral-800">
                       <Avatar className="h-7 w-7">
                         <AvatarImage src="/professional-mongolian-male-host.jpg" />
                         <AvatarFallback>
@@ -170,6 +171,13 @@ export const Header = () => {
                  hover:bg-neutral-800/60 transition-all duration-150"
                       >
                         📦 Миний захиалгууд
+                      </button>
+                      <button
+                        onClick={() => router.push("eventhall-form")}
+                        className="w-full text-left px-4 py-2.5 text-sm rounded-lg 
+                 hover:bg-neutral-800/60 transition-all duration-150"
+                      >
+                        🏛️ Танхим нэмэх
                       </button>
                     </div>
 
@@ -231,6 +239,7 @@ export const Header = () => {
             <div className="flex items-center justify-center">
               <Search className="mr-[-36] w-5 z-10 text-neutral-500" />
               <SearchFunction styleDesktop={styleMobile} />
+              {/* Small button for mobile search area (placeholder for filters) */}
             </div>
           )}
         </div>
@@ -246,7 +255,7 @@ export const Header = () => {
                 {isLoggedIn ? (
                   <Popover>
                     <PopoverTrigger asChild>
-                      <button className="flex ml-4 items-center gap-2 rounded-3xl border bg-neutral-900 border-white/10 p-1.5 pr-3 transition-all hover:border-neutral-500/30 hover:bg-neutral-800">
+                      <button className="flex ml-0 items-center gap-2 rounded-3xl border bg-neutral-900 border-white/10 p-1.5 pr-3 transition-all hover:border-neutral-500/30 hover:bg-neutral-800">
                         <Avatar className="h-7 w-7 bg-neutral-700">
                           <AvatarImage src="/professional-mongolian-male-host.jpg" />
                           <AvatarFallback>
@@ -297,6 +306,13 @@ export const Header = () => {
                           {user?.role === "hallowner"
                             ? "🏢 Танхим засах"
                             : "📦 Миний захиалгууд"}
+                        </button>
+                        <button
+                          onClick={() => router.push("eventhall-form")}
+                          className="w-full text-left px-4 py-2.5 text-sm rounded-lg 
+                 hover:bg-neutral-800/60 transition-all duration-150"
+                        >
+                          🏛️ Танхим нэмэх
                         </button>
                       </div>
 
