@@ -131,13 +131,9 @@ export default function SelectedEventHall() {
           }
           alt={eventHallData.name}
           className="h-full w-full object-cover transition-all duration-500"
-        />
-        <Link href="/event-halls">
-          <Button className="text-4xl fixed">Butsah</Button>
-        </Link>
+        />{" "}
         {/* Clean gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-background/20" />
-
         {/* Hero Content */}
         <div className="sticky bottom-0 left-0 right-0 p-8 md:p-12">
           <div className="max-w-400 mx-auto">
@@ -157,16 +153,18 @@ export default function SelectedEventHall() {
             </h1>
 
             {eventHallData.location && (
-              <div className="flex items-center   md:mb-3 mb-4">
-                <MapPin className="w-4 h-4" />
-                <p className=" text-foreground/60 flex items-center gap-2 truncate">
-                  {eventHallData.location}
-                </p>
+              <div>
+                {" "}
+                <div className="flex items-center   md:mb-3 mb-4">
+                  <MapPin className="w-4 h-4" />
+                  <p className=" text-foreground/60 flex items-center gap-2 truncate">
+                    {eventHallData.location}
+                  </p>
+                </div>{" "}
               </div>
             )}
           </div>
         </div>
-
         {/* Minimal navigation controls */}
         {eventHallData.images.length > 1 && (
           <div>
@@ -184,7 +182,6 @@ export default function SelectedEventHall() {
             </button>
           </div>
         )}
-
         {/* Image counter */}
         <div className="absolute top-6 right-6 text-sm text-foreground/60 font-medium">
           {currentImageIndex + 1} / {eventHallData.images.length}
@@ -241,7 +238,9 @@ export default function SelectedEventHall() {
           )}
         </div>
       </section>
-
+      <Link href="/event-halls">
+        <Button className="text-xl ml-86">Буцах</Button>
+      </Link>
       <section className="max-w-400 mx-auto px-6 mt-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <InfoCard
