@@ -126,7 +126,7 @@ export default function HallOwnerDashboard() {
   }
 
   return (
-    <div className="bg-black min-h-screen text-white">
+    <div className="bg-black mt-25 min-h-screen text-white">
       <main className="container mx-auto p-4 md:p-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 bg-linear-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">

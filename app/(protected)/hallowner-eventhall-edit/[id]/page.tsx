@@ -181,6 +181,7 @@ export default function SelectedEventHall() {
       </div>
     );
   }
+  const Mockimages = [{ src: "/zurag1.jpg" }];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -225,7 +226,9 @@ export default function SelectedEventHall() {
 
             {editingSection === "location" && (
               <div>
-                <label className="text-sm font-medium">Байршил</label>
+                <label className="text-sm text-white font-medium">
+                  Байршил
+                </label>
                 <Input
                   value={editFormData.location || ""}
                   onChange={(e) =>
@@ -406,6 +409,22 @@ export default function SelectedEventHall() {
       </Dialog>
 
       <section className="relative h-[70vh] w-full overflow-hidden">
+        {eventHallData.id === 3 && (
+          <div>
+            {Mockimages.map((_, index) => (
+              <Image
+                src={`${_.src}`}
+                key={index}
+                alt="Special Image"
+                width={1200}
+                height={800}
+                priority
+                quality={100}
+                className="absolute inset-0 h-full w-full object-cover transition-all duration-500"
+              />
+            ))}
+          </div>
+        )}
         <Image
           width={1200}
           height={800}
@@ -516,7 +535,7 @@ export default function SelectedEventHall() {
       <section className="max-w-400 mx-auto px-6 mt-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <InfoCard
-            icon={<MapPin className="h-4 w-4" />}
+            icon={<MapPin className="h-4 w-4 text-white" />}
             label="Байршил"
             value={eventHallData.location || "—"}
             link={eventHallData.localtion_link}
@@ -599,14 +618,14 @@ export default function SelectedEventHall() {
 
               {eventHallData.advantages.length > 0 && (
                 <div className="mt-8">
-                  <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
+                  <h4 className="text-sm font-medium text-white uppercase tracking-wide mb-4">
                     Давуу талууд
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {eventHallData.advantages.map((adv, i) => (
                       <span
                         key={i}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary text-sm"
+                        className="inline-flex text-muted-foreground items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary text-sm"
                       >
                         <Check className="w-3.5 h-3.5" />
                         {adv}
@@ -621,7 +640,7 @@ export default function SelectedEventHall() {
             {eventHallData.suitable_events.length > 0 && (
               <div className="relative">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold">
+                  <h2 className="text-xl font-semibold text-white">
                     Тохиромжтой эвентүүд
                   </h2>
                   {isOwner && (
@@ -643,7 +662,7 @@ export default function SelectedEventHall() {
                   {eventHallData.suitable_events.map((event, i) => (
                     <span
                       key={i}
-                      className="px-4 py-2 rounded-full border border-border text-sm"
+                      className="px-4 py-2 rounded-full border border-border text-sm text-muted-foreground"
                     >
                       {event}
                     </span>
@@ -723,11 +742,11 @@ function InfoCard({
     <div className="p-4 rounded-xl bg-card border border-border hover:border-foreground/20 transition-colors group relative">
       <div className="flex items-center gap-2 mb-2 text-muted-foreground">
         {icon}
-        <span className="text-xs font-medium uppercase tracking-wide">
+        <span className="text-xs font-medium uppercase tracking-wide text-white">
           {label}
         </span>
       </div>
-      <p className="font-medium flex items-center gap-1.5">
+      <p className="font-medium flex items-center gap-1.5 text-muted-foreground">
         {value}
 
         {link && (

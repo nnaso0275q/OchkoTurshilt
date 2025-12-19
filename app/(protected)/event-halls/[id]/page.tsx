@@ -58,6 +58,7 @@ export default function SelectedEventHall() {
         body: JSON.stringify({ eventHallId }),
       });
       const data = await res.json();
+      console.log(data.data);
       setEventHallData(data.data);
     } catch (error) {
       console.error("Error fetching event hall:", error);
@@ -96,7 +97,7 @@ export default function SelectedEventHall() {
       </div>
     );
   }
-  const Mockimages = [{ src: "/zurag1.jpg" }, { src: "/zurag2.jpg" }];
+  const Mockimages = [{ src: "/zurag1.jpg" }];
 
   return (
     <div className="min-h-screen bg-background text-foreground">

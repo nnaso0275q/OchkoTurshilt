@@ -16,7 +16,7 @@ export default function EventHallsSkeleton() {
       {Array.from({ length: skeletonCount }).map((_, i) => (
         <div
           key={i}
-          className="flex-1 min-w-[280px] max-w-[470px] w-full
+          className="flex-1 min-w-70 max-w-117.5 w-full
                      bg-neutral-900 rounded-lg overflow-hidden shadow-xl
                      flex flex-col"
         >
