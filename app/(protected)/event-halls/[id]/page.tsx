@@ -238,9 +238,7 @@ export default function SelectedEventHall() {
           )}
         </div>
       </section>
-      <Link href="/event-halls">
-        <Button className="text-xl ml-86">Буцах</Button>
-      </Link>
+
       <section className="max-w-400 mx-auto px-6 mt-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <InfoCard
