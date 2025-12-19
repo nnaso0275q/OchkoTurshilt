@@ -245,18 +245,18 @@ export default function SelectedEventHall() {
       <section className="max-w-400 mx-auto px-6 mt-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <InfoCard
-            icon={<MapPin className="h-4 w-4" />}
+            icon={<MapPin color="white" className="h-4 w-4" />}
             label="Байршил"
             value={eventHallData.location || "—"}
             link={eventHallData.localtion_link}
           />
           <InfoCard
-            icon={<Users className="h-4 w-4" />}
+            icon={<Users className="h-4 w-4 " color="white" />}
             label="Хүчин чадал"
             value={eventHallData.capacity || "—"}
           />
           <InfoCard
-            icon={<Car className="h-4 w-4" />}
+            icon={<Car color="white" className="h-4 w-4" />}
             label="Зогсоол"
             value={
               eventHallData.parking_capacity
@@ -266,7 +266,7 @@ export default function SelectedEventHall() {
           />
           <div>
             <InfoCard
-              icon={<Phone className="h-4 w-4" />}
+              icon={<Phone color="white" className="h-4 w-4" />}
               label="Утас"
               value={eventHallData.phonenumber || "—"}
               isPhone
