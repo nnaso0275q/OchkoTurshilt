@@ -94,12 +94,12 @@ export function AuthForm({
     >
       <div className="p-8 text-white">
         <h2 className="text-3xl font-bold mb-2 text-center">
-          {isLoginView ? "Welcome Back" : "Create Account"}
+          {isLoginView ? "Тавтай морил" : "Аккоунт бүртгүүлэх"}
         </h2>
         <p className="text-center text-neutral-400 mb-8">
           {isLoginView
-            ? "Log in to continue your journey."
-            : "Sign up to get started."}
+            ? "Нэвтэрж ороод танхимаа захиалаарай."
+            : "Эхлэхийн тулд бүртгүүлээрэй."}
         </p>
 
         {error && (
@@ -122,7 +122,7 @@ export function AuthForm({
             )}
             <input
               type="email"
-              placeholder="Email or Phone"
+              placeholder="Мэйл эсвэл утас"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-neutral-800 text-white px-4 py-3 rounded-lg border border-neutral-700 focus:border-blue-500 focus:outline-none"
@@ -130,7 +130,7 @@ export function AuthForm({
             />
             <input
               type="password"
-              placeholder="Password"
+              placeholder="Нууц үг"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-neutral-800 text-white px-4 py-3 rounded-lg border border-neutral-700 focus:border-blue-500 focus:outline-none"
@@ -143,7 +143,11 @@ export function AuthForm({
             disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg mt-8 disabled:bg-blue-800 disabled:cursor-not-allowed"
           >
-            {loading ? "Logging in..." : isLoginView ? "Log In" : "Sign Up"}
+            {loading
+              ? "Уншиж байна..."
+              : isLoginView
+              ? "Нэвтрэх"
+              : "Бүртгүүлэх"}
           </button>
         </form>
 
@@ -153,8 +157,8 @@ export function AuthForm({
             className="text-sm text-neutral-400 hover:text-white"
           >
             {isLoginView
-              ? "Don't have an account? Sign Up"
-              : "Already have an account? Log In"}
+              ? "Аккоунт байхгүй юу? Бүртгүүлэх"
+              : "Аль хэдийн аккоунт байгаа юу? Нэвтрэх"}
           </button>
         </div>
       </div>
