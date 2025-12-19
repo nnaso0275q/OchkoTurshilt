@@ -4,7 +4,7 @@
 import type React from "react";
 
 import { Button } from "@/components/ui/button";
-import { X, Calendar, Clock } from "lucide-react";
+import { X, Calendar, Clock, QrCode } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -271,7 +271,10 @@ export default function DateForm({
               </span>
             </div>
           </div>
-
+          <Button className="w-full bg-neutral-800 text-white hover:bg-neutral-700 font-medium mb-3 flex items-center justify-center gap-2">
+            <QrCode className="h-4 w-4" />
+            QR уншуулах
+          </Button>
           <Button
             onClick={handleSubmit}
             className="w-full bg-white text-black hover:bg-neutral-200 font-medium"
