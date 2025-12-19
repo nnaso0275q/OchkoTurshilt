@@ -92,8 +92,8 @@ export const WhyChooseUs = () => {
       </audio>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12 lg:mb-16">
-          <h2 className="font-extrabold text-3xl lg:text-5xl mb-4 md:mt-0 mt-3">
+        <div className="text-center mb-2 lg:mb-16">
+          <h2 className="font-extrabold text-2xl lg:text-5xl mb-4 md:mt-0 mt-3">
             Яагаад биднийг сонгох естой вэ?
           </h2>
           <p className="max-w-2xl mx-auto text-[14px] lg:text-lg text-neutral-400">
@@ -107,10 +107,12 @@ export const WhyChooseUs = () => {
           {features.map((feature, idx) => (
             <div
               key={idx}
-              className="text-center p-6 bg-black/50 backdrop-blur-sm rounded-lg border border-neutral-800 transition-transform hover:scale-105 hover:bg-black/60"
+              className="text-center p-3 bg-black/50 backdrop-blur-sm rounded-lg border border-neutral-800 transition-transform hover:scale-105 hover:bg-black/60"
             >
-              <div className="flex justify-center mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+              <div className="flex  justify-center mb-2">{feature.icon}</div>
+              <h3 className="lg:text-xl text-[17px]  font-bold mb-1">
+                {feature.title}
+              </h3>
               <p className="text-neutral-400 text-sm">{feature.description}</p>
             </div>
           ))}
